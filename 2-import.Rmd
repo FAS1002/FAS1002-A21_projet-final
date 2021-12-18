@@ -33,12 +33,11 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r}
 #Packages utilisés:
 library(tidyverse)
+library(lubridate)
 ```
 
 
 # Importation des données
-
-
 *À faire dans cette section:*
 
 *###Importer les données de vaccination (coronavirus) à partir de Our World in Data*
@@ -48,6 +47,30 @@ library(tidyverse)
 *sauvegarder le fichier avec la date du téléchargement dans le titre*
 *Fréquence du téléchargement: une journée*
 *effacer l'ancien fichier après*
+
+```{r}
+URLvacOWID <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv"
+AjdDate <- Sys.Date()
+
+
+```
+
+
+```{r, eval=FALSE}
+# Création du raw data initial des données du projet en date du 18 décembre 2021
+# Aucune manipulation sur ces données pour garder la trace de la démarche
+# et une copie automatiquement fonctionnelle, si besoin de retourner en arrière
+# Sys.Date() utilisé, mais ne devrait pas changer, 
+# car ce code ne sera pas exécuté à nouveau: eval=FALSE
+
+VaccinationRaw <- read.csv(URLvacOWID)
+
+write.csv(VaccinationRaw,paste0("./Data/Raw/VaccinationRawData", Sys.Date(), ".csv"))
+```
+
+
+
+
 
 
 *###Importer les données de population de Gapminder*
