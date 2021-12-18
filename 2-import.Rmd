@@ -1,22 +1,23 @@
 ---
-title: "Titre de votre deuxième R Markdown"
+title: "Importation et manipulation des données"
 description: | 
-  Petite description du contenu de cette page
+  Importation suivi de la manipulation des données utilisées dans le cadre du 
+  travail final pour le cours FAS1002 de l'automne 2021.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
 author:
-  - first_name: "Prénom"
-    last_name: "Nom"
-    url: https://github.com/votre-username
+  - first_name: "Emmanuelle"
+    last_name: "Pépin"
+    url: https://github.com/EmmaPep
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
     affiliation_url: https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/
     # changer pour votre propre orcid id
     # https://orcid.org/ pour vous inscrire.
-    orcid_id: 0000-0000-0000-0000
+    # orcid_id: 0000-0000-0000-0000
 # Changer pour votre propre URL si jamais quelqu'un vous cite!
-citation_url: https://fas1002.github.io/FAS1002_projet-final
+citation_url: https://emmapep.github.io/FAS1002_projet-final/
 # Inclure les références que vous utilisez dans vos rapports
 # dans un fichier biblio.bib. Je conseille Zotero pour construire
 # ce fichier ou d'utiliser le package citr dans RStudio.
@@ -28,6 +29,52 @@ output: distill::distill_article
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+```{r}
+#Packages utilisés:
+library(tidyverse)
+```
+
+
+# Importation des données
+
+
+*À faire dans cette section:*
+
+*###Importer les données de vaccination (coronavirus) à partir de Our World in Data*
+*Voir sur GitHub*
+*développer du code pour:*
+*télécharger*
+*sauvegarder le fichier avec la date du téléchargement dans le titre*
+*Fréquence du téléchargement: une journée*
+*effacer l'ancien fichier après*
+
+
+*###Importer les données de population de Gapminder*
+*développer du code pour:*
+*télécharger*
+*sauvegarder le fichier avec la date du téléchargement dans le titre*
+*Fréquence du téléchargement: un mois*
+*effacer l'ancien fichier après*
+
+
+*###Importer les données de GDP de Gapminder*
+*développer du code pour:*
+*télécharger*
+*sauvegarder le fichier avec la date du téléchargement dans le titre*
+*Fréquence du téléchargement: un mois*
+*effacer l'ancien fichier après*
+
+*DONNÉES BRUTES: Dossier data/raw/*
+
+*Mettre les données dans un tibble*
+
+*Transformer les types de variables (incl: niveaux des facteurs, dates, etc.)*
+
+
+
+
+***À EFFACER AVANT LA REMISE Contenu initial: pour référence***
 
 Vous pouvez maintenant importer et travailler sur vos données, comme celles de @mathieu2021.
 
