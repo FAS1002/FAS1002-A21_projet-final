@@ -50,31 +50,43 @@ library(lubridate)
 
 ```{r}
 URLvacOWID <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv"
-AjdDate <- Sys.Date()
-
+VaccinationOWID <- read.csv(URLvacOWID)
 
 ```
 
 
 ```{r, eval=FALSE}
 # Création du raw data initial des données du projet en date du 18 décembre 2021
-# Aucune manipulation sur ces données pour garder la trace de la démarche
-# et une copie automatiquement fonctionnelle, si besoin de retourner en arrière
-# Sys.Date() utilisé, mais ne devrait pas changer, 
+# Aucune manipulation n'a été faite sur ces données
+# Peut être utilisé comme point de référence pour utiliser les données de départ
+# Sys.Date() utilisé pour standardiser le format de date, mais ne changera pas
 # car ce code ne sera pas exécuté à nouveau: eval=FALSE
+# Dans l'éventualité ou le code serait exécuté à nouveau, un nouveau fichier
+# avec une autre date serait créé sans écraser le document initial.
 
-VaccinationRaw <- read.csv(URLvacOWID)
-
-write.csv(VaccinationRaw,paste0("./Data/Raw/VaccinationRawData", Sys.Date(), ".csv"))
+write.csv(VaccinationOWID,paste0("./Data/Raw/VaccinationRawData", Sys.Date(), ".csv"))
 ```
 
+```{r, eval=FALSE}
+# Création du processed data initial des données du projet en date du 18 décembre 2021
+# Aucune manipulation n'a été faite sur ces données
+# Sera utilisé comme premier fichier de données
+# eval = FALSE utilisé pour laisser une trace de la démarche,
+# la création des prochains fichiers de données sera dans le bloc suivant
+# et pourra alors suivre les consignes données pour le travail
 
+write.csv(VaccinationOWID,paste0("./Data/Processed/Vaccination", Sys.Date(), ".csv"))
+```
 
 
 
 
 *###Importer les données de population de Gapminder*
 *développer du code pour:*
+*OK Raw data*
+
+*Processed data*
+
 *télécharger*
 *sauvegarder le fichier avec la date du téléchargement dans le titre*
 *Fréquence du téléchargement: un mois*
