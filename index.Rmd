@@ -1,7 +1,8 @@
 ---
-title: "Titre de votre projet final"
+title: "Portrait de la vaccination contre la covid-19 dans le monde"
 description: |
-  Ceci est votre page d'accueil de votre site web
+  Bienvenue sur ce site portant sur l'exploration des données mondiales de la vaccination contre la covid-19. Cette situation qui évolue à vitesse grand v est une source infinie de données. Les prochaines pages permettrons de débuter à examiner la situation actuelle. Évidemment, la magnitude de la pandémie de SRAS-CoV-2 est grande. Il s'agit donc ici d'une occasion de sonder les données afin d'approfondir notre compréhension de celles-ci. ^[Limite de cet exercice: il est important de noter que le but de cette présentation est d'explorer les données et non d'émettre quelconques recommendations ou d'en sortir des conclusions hautement scientifiques.]
+  
 site: distill::distill_website
 toc: false
 ---
