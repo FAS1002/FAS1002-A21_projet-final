@@ -48,7 +48,13 @@ DataGapCountriesGDP <- read_excel(paste0("./Data/Raw/", GDPFile), sheet = 4)
 # Changer le titre de la colonne iso_code
 # Mettre même titre que celui utilisé par Gapminder
 DataVaccin <- rename(DataVaccin, geo = iso_code)
+# Changer le format pour une date
+DataVaccin$date <- as_date(DataVaccin$date)
 
+#Obtenir les quantités de vaccins par région
+RegionVaccin <- subset(DataVaccin, geo=="OWID_AFR" | geo=="OWID_ASI" | geo=="OWID_EUR" | geo=="OWID_NAM" | geo=="OWID_OCE" | geo=="OWID_SAM")
+
+ 
 # Mettre les données mondiales dans un autre objet avant de les enlever
 # Enlever la colonne geo (info. redondante)
 # location gardée pour le moment au cas où serait utile
@@ -56,12 +62,15 @@ WorldVaccine <- subset(DataVaccin, geo == "OWID_WRL")
 WorldVaccine <- subset(WorldVaccine, select = -c(2))
 
 # Utiliser stringr pour sélectionner les codes iso (geo) OWID
-# qui correspondent à des régions, sous-catégories, etc. et les enlever
+# qui correspondent à des régions, sous-catégories, etc. et les enlever du df principal
 DataVaccin <- DataVaccin %>% 
     filter(!str_detect(geo, "OWID"))
 
+
 # Création d'une nouvelle colonne avec l'année de vaccination pour simplifier
 # la fusion avec Gapminder qui a des données par années et l'exploration des données
+
+
 DataVaccin <- DataVaccin %>% 
     mutate(year = year(date)) %>% 
     relocate(year, .after = "geo")
@@ -69,6 +78,10 @@ DataVaccin <- DataVaccin %>%
 WorldVaccine <- WorldVaccine %>% 
 mutate(year = year(date)) %>% 
     relocate(year, .after = "location")
+
+RegionVaccin <- RegionVaccin %>% 
+    mutate(year = year(date)) %>%  
+    relocate(year, .after = "geo")
 
 # 2.2 Gapminder
 # 2.2.1 Données de population
@@ -89,7 +102,7 @@ DataGapWorldPop <- subset(DataGapWorldPop, time <= 2022)
 DataGapCountriesPop$geo <- str_to_upper(DataGapCountriesPop$geo)
 
 # 2.2 Gapminder
-# 2.2.2 DGDP
+# 2.2.2 GDP
 
 # Les données débutent en 1800 et terminent avec les projections de l'an 2100
 # Enlever les années précédent le début de la vaccination (enlever avant 2020)
@@ -119,6 +132,8 @@ Continents <- read.csv("./Data/Raw/ContinentsOWID.csv", stringsAsFactors = TRUE)
 Continents <- subset(Continents, select = -c(3))
 # Enlever entity pour éviter d'ajouter une autre colonne avec les noms de pays/entités
 Continents <- subset(Continents, select = -c(1))
+# Changer le nom de la colonne Code pour qu'elle concorde avec geo
+colnames(Continents)[1] <- "geo"
 
 
 # Enlever objets inutiles
