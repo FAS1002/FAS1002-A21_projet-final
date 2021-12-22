@@ -42,3 +42,4 @@ if(DateGDPMois < Sys.Date())
 rm(DateGDP, DateGDPMois, DatePop, DatePopMois, DateVac, ListeGDP, ListePop, ListeVac)
 
 # Fin
+print("Fin des téléchargements")
