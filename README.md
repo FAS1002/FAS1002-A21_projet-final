@@ -1,5 +1,62 @@
 # FAS1002_projet-final
 
+Les documents inclus dans ce répertoire constituent le travail final du
+cours [FAS1002 - Initiation à la programmation en sciences
+sociales](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) donné 
+lors de la sesssion d'automne 2021 du [Microprogramme de 1er cycle en analyse des
+mégadonnées en sciences humaines et
+sociales](https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/).
+
+Le présent répertoire sert à générer la version web qui lui est associée et
+pouvant être trouvée au <https://emmapep.github.io/FAS1002_projet-final/>.
+
+## Source du répertoire
+Le présent répertoire est un *fork* du [compte principal du cours FAS1002]
+(https://github.com/FAS1002/FAS1002_projet-final). Des dossiers y ont été 
+ajouté afin de suivre la présentation suggérée dans le répertoire [template
+ISDS](https://github.com/osumontreal/template_r). 
+
+## Structure du répertoire
+
+``` bash
+├── 1-intro.Rmd
+├── 2-import.Rmd
+├── 3-exploration.Rmd
+├── contact.Rmd
+├── docs
+├── FAS1002_projet-final.Rproj
+├── _footer.html
+├── index.Rmd
+├── README.md
+├── references.bib
+├── _site.yml
+└── static
+    ├── images
+    │   └── FAS1002.png
+    └── theme.css
+```
+
+
+## Documents dans le répertoire
+
+**1-intro.Rmd**
+Document Rmarkdown comprenant l'introduction et la description du projet
+
+
+
+**FAS1002_projet-final.Rproj**
+Session de travail du projet dans RStudio
+
+
+
+
+
+
+
+
+
+# FAS1002_projet-final
+
 Ce répertoire se veut exemple typique d'un rapport fonctionnel à remettre pour
 le projet final du cours [FAS1002 - Initiation à la programmation en sciences
 sociales](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) qui
