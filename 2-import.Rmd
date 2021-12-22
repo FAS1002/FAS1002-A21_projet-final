@@ -1,8 +1,8 @@
 ---
 title: "Importation et manipulation des données"
 description: | 
-  Importation suivi de la manipulation des données utilisées dans le cadre du 
-  travail final pour le cours FAS1002 de l'automne 2021.
+  Importation suivi de la manipulation des données utilisées à des fins d'analyses
+  dans le cadre du travail final pour le cours FAS1002 de l'automne 2021.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
 author:
@@ -30,77 +30,60 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r, include=FALSE}
+# Importation du script de téléchargement des données
+source("R/Telechargement.R", local = knitr::knit_global())
+```
+
+
 ```{r}
 #Packages utilisés:
 library(tidyverse)
 library(lubridate)
 ```
 
+# Données
+Les données utilisées dans le présent travail proviennent de deux sources différentes, 
+Our World in Data et Gapminder. Ces organisations ont comme mission d'utiliser les 
+données afin d'illustrer de façon compréhensible et excitantes les problèmes et enjeux du monde actuel.
+Vu la quantité infinie d'information disponible, il est toutefois important de bien cerner
+les données à utiliser. La présente section décrit les jeux de données retenus
+ainsi que la démarche effectuée pour préparer les dpréparer.
 
-# Importation des données
+## Our World in Data (OWID)
+### Données sur la vaccination (covid-19)
+La banque de données principal de cette étude provient de l'organisme [Our World in Data](https://ourworldindata.org/) qui est présentement très actif pour colliger et visualiser les données de la pandémie en cours. Nous nous attarderons ici aux données sur la vaccination. Contenant plusieurs données clé pour le suivi du statut vaccinal à l'échelle mondiale, ce jeu de données peut d'ailleurs être consulté sur [leur répertoire](https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations) qui est mis à jour quotidiennement. Plusieurs visualisations fort intéressantes et très détaillées sont d'ailleurs disponibles sur [leur site](https://ourworldindata.org/covid-vaccinations). Ici, toutefois, nous nous servirons de cette banque de données à des fins d'exploration. Elle sera également combinée avec les banques de données qui suivent.
+
+*La banque de données de vaccination en quelques points*
+- Disponible en format .csv sur GitHub
+- Elle contient 16 variables
+- Des observations sont ajoutées quotidiennement
+- Les observations sont classées selon le pays ou une région définie par OWID
+  - Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3
+  - Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
+
+## Gapminder
+### Population et produit intérieur brut (P.I.B.)
+Deux banques de données tirés de [Gapminder](https://www.gapminder.org/) sont utilisées pour ce travail. Tout d'abord une banque concernant la [population mondiale](https://docs.google.com/spreadsheets/d/14_suWY8fCPEXV0MH7ZQMZ-KndzMVsSsA5HdR-7WqAC0/edit#gid=501532268) et une seconde comprenant le [produit intérieur brute par habitant](https://docs.google.com/spreadsheets/d/1gZZ28UiWCVue-tFHMEVOvSO58x7x-w20E23l1wZTR3E/edit#gid=501532268). Cela servira à mettre en relation divers paramètres sociaux avec la banque de données de vaccination d'OWID.
+
+*Les banques de données de population et de P.I.B. en quelques points*
+- Disponibles en format .xlsx sur Google Doc
+- Les fichiers Excel contiennent différentes pages (monde, par pays, par continent, per capita, etc. qui peuvent être traitées séparément
+- Les mise-à-jour ne sont pas constantes, mais la date de la dernière mise-à-jour est toujours disponible sur la première page nommée "About" du fichier Excel.
+  - Population dernière mise-à-jour  disponible en date du 22 décembre 2021 : 10 décembre 2019
+  - GDP dernière mise-à-jour disponible en date du 22 décembre 2021 : 30 avril 2021
+- Particularité de Gapminder: leurs banques de données contiennent les prévisions pour les années à venir d'où l'importance de la date de mise-à-jour. Ainsi, les informations de population de 2020 et 2021, par exemple, devraient changer lorsque l'information sera disponible. Cela affectera les résultats des calculs. *Voir la description de l'algorithme de téléchargement plus bas pour plus d'informations.*
+
+
+# Traitement des données
+## Importation/téléchargement des données
+
+
+Les don
+
 *À faire dans cette section:*
 
-*###Importer les données de vaccination (coronavirus) à partir de Our World in Data*
-*Voir sur GitHub*
-*développer du code pour:*
-*télécharger*
-*sauvegarder le fichier avec la date du téléchargement dans le titre*
-*Fréquence du téléchargement: une journée*
-*effacer l'ancien fichier après*
 
-```{r}
-URLvacOWID <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv"
-VaccinationOWID <- read.csv(URLvacOWID)
-
-```
-
-
-```{r, eval=FALSE}
-# Création du raw data initial des données du projet en date du 18 décembre 2021
-# Aucune manipulation n'a été faite sur ces données
-# Peut être utilisé comme point de référence pour utiliser les données de départ
-# Sys.Date() utilisé pour standardiser le format de date, mais ne changera pas
-# car ce code ne sera pas exécuté à nouveau: eval=FALSE
-# Dans l'éventualité ou le code serait exécuté à nouveau, un nouveau fichier
-# avec une autre date serait créé sans écraser le document initial.
-
-write.csv(VaccinationOWID,paste0("./Data/Raw/VaccinationRawData", Sys.Date(), ".csv"))
-```
-
-```{r, eval=FALSE}
-# Création du processed data initial des données du projet en date du 18 décembre 2021
-# Aucune manipulation n'a été faite sur ces données
-# Sera utilisé comme premier fichier de données
-# eval = FALSE utilisé pour laisser une trace de la démarche,
-# la création des prochains fichiers de données sera dans le bloc suivant
-# et pourra alors suivre les consignes données pour le travail
-
-write.csv(VaccinationOWID,paste0("./Data/Processed/Vaccination", Sys.Date(), ".csv"))
-```
-
-
-
-
-*###Importer les données de population de Gapminder*
-*développer du code pour:*
-*OK Raw data*
-
-*Processed data*
-
-*télécharger*
-*sauvegarder le fichier avec la date du téléchargement dans le titre*
-*Fréquence du téléchargement: un mois*
-*effacer l'ancien fichier après*
-
-
-*###Importer les données de GDP de Gapminder*
-*développer du code pour:*
-*télécharger*
-*sauvegarder le fichier avec la date du téléchargement dans le titre*
-*Fréquence du téléchargement: un mois*
-*effacer l'ancien fichier après*
-
-*DONNÉES BRUTES: Dossier data/raw/*
 
 *Mettre les données dans un tibble*
 
