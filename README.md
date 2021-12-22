@@ -11,9 +11,8 @@ Le présent répertoire sert à générer la version web qui lui est associée e
 pouvant être trouvée au <https://emmapep.github.io/FAS1002_projet-final/>.
 
 ## Source du répertoire
-Le présent répertoire est un *fork* du [compte principal du cours FAS1002]
-(https://github.com/FAS1002/FAS1002_projet-final). Des dossiers y ont été 
-ajouté afin de suivre la présentation suggérée dans le répertoire [template
+Le présent répertoire est un *fork* du [compte principal du cours FAS1002](https://github.com/FAS1002/FAS1002_projet-final). 
+Des dossiers y ont été ajouté afin de suivre la présentation suggérée dans le répertoire [template
 ISDS](https://github.com/osumontreal/template_r). 
 
 ## Structure du répertoire
@@ -41,6 +40,10 @@ ISDS](https://github.com/osumontreal/template_r).
 
 **1-intro.Rmd**
 Document Rmarkdown comprenant l'introduction et la description du projet
+
+**2-import.Rmd**
+
+**3-exploration.Rmd**
 
 
 
