@@ -4,6 +4,7 @@
 
 # Utilisation de readxl
 library(tidyverse)
+library(lubridate)
 
 # 1 OUVERTURE DES DONNÉES
 # 1.1 OWID 
@@ -40,9 +41,6 @@ DataGapWorldGDP <- read_excel(paste0("./Data/Raw/", GDPFile), sheet = 2)
 DataGapRegionGDP <- read_excel(paste0("./Data/Raw/", GDPFile), sheet = 3)
 DataGapCountriesGDP <- read_excel(paste0("./Data/Raw/", GDPFile), sheet = 4)
 
-# Enlever objets inutiles
-rm(VacFile, PopFile, GDPFile)
-
 # 2 Manipulation des données
 # 2.1 OWID
 # 2.1.1 Données de vaccination
@@ -58,13 +56,59 @@ WorldVaccine <- subset(DataVaccin, geo == "OWID_WRL")
 WorldVaccine <- subset(WorldVaccine, select = -c(2))
 
 # Utiliser stringr pour sélectionner les codes iso (geo) OWID
-# qui correspondent à des régions, sous-catégories, etc.
-
+# qui correspondent à des régions, sous-catégories, etc. et les enlever
 DataVaccin <- DataVaccin %>% 
     filter(!str_detect(geo, "OWID"))
 
+# Création d'une nouvelle colonne avec l'année de vaccination pour simplifier
+# la fusion avec Gapminder qui a des données par années et l'exploration des données
+DataVaccin <- DataVaccin %>% 
+    mutate(year = year(date)) %>% 
+    relocate(year, .after = "geo")
 
+WorldVaccine <- WorldVaccine %>% 
+mutate(year = year(date)) %>% 
+    relocate(year, .after = "location")
 
+# 2.2 Gapminder
+# 2.2.1 Données de population
+
+# Les données débutent en 1800 et terminent avec les projections de l'an 2100
+# Enlever les années précédent le début de la vaccination (enlever avant 2020)
+DataGapCountriesPop <- subset(DataGapCountriesPop, time >= 2020)
+DataGapRegionPop <- subset(DataGapRegionPop, time >= 2020)
+DataGapWorldPop <- subset(DataGapWorldPop, time >= 2020)
+
+#Garder 2020, 2021 et 2022 (car débute dans quelques jours, donc enlever après 2022)
+DataGapCountriesPop <- subset(DataGapCountriesPop, time <= 2022)
+DataGapRegionPop <- subset(DataGapRegionPop, time <= 2022)
+DataGapWorldPop <- subset(DataGapWorldPop, time <= 2022)
+
+# Standardiser la casse des lettres de la variable geo pour que ça concorde
+# avec celle utilisé dans le jeu de données de OWID
+DataGapCountriesPop$geo <- str_to_upper(DataGapCountriesPop$geo)
+
+# 2.2 Gapminder
+# 2.2.2 DGDP
+
+# Les données débutent en 1800 et terminent avec les projections de l'an 2100
+# Enlever les années précédent le début de la vaccination (enlever avant 2020)
+DataGapCountriesGDP <- subset(DataGapCountriesGDP, time >= 2020)
+DataGapRegionGDP <- subset(DataGapRegionGDP, time >= 2020)
+DataGapWorldGDP <- subset(DataGapWorldGDP, time >= 2020)
+
+#Garder 2020, 2021 et 2022 (car débute dans quelques jours, donc enlever après 2022)
+DataGapCountriesGDP <- subset(DataGapCountriesGDP, time <= 2022)
+DataGapRegionGDP <- subset(DataGapRegionGDP, time <= 2022)
+DataGapWorldGDP <- subset(DataGapWorldGDP, time <= 2022)
+
+# Standardiser la casse des lettres de la variable geo pour que ça concorde
+# avec celle utilisé dans le jeu de données de OWID
+DataGapCountriesGDP$geo <- str_to_upper(DataGapCountriesGDP$geo)
+
+# Renommer la dernière colonne (6e) de DataGapCountriesGDP en utilisant la position
+# car la chaîne de caractère est longue
+colnames(DataGapCountriesGDP)[6] <- "Annual GDP per capita growth"
 
 
 # Lire le fichier CSV avec les continents/codes ISO
@@ -77,4 +121,5 @@ Continents <- subset(Continents, select = -c(3))
 Continents <- subset(Continents, select = -c(1))
 
 
-
+# Enlever objets inutiles
+rm(VacFile, PopFile, GDPFile)
