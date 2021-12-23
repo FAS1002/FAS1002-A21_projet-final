@@ -35,10 +35,11 @@ source("R/Telechargement.R", local = knitr::knit_global())
 source("R/Ouverture-donnees-raw.R", local = knitr::knit_global())
 ```
 
-```{r}
+```{r, include=FALSE}
 #Packages utilisés:
 library(tidyverse)
 library(lubridate)
+library(rmarkdown)
 ```
 
 # Données
@@ -99,16 +100,58 @@ l'Afrique, les Amériques, l'Asie et l'Europe.
 ### Finalement, trois fichiers de données traitées
 À la suite de ces étapes, le script permet de produire trois nouveaux jeux de données contenant les données de vaccination par pays, par continent et pour le monde pour les années 2020 à 2022. Trois fichiers en format .csv sont disponibles dans le dossier Data/Processed du répertoire du présent projet. Ils représentent les données de vaccination mises en relation avec la population et le P.I.B. et sont divisés selon leur information géographique soit par pays, par continent et finalement pour le monde tel que décrit.
 
-## Quelques tableaux de données
+## Quelques tableaux de données et calculs
 
-Mais trève de descriptif! Voici quelques tableaux pour vous montrer les données.
+Mais trève de descriptif! Voici quelques tableaux et calculs pour vous montrer les données.  
 
-Tout d'abord les tableaux des données:
+Tout d'abord voici les 100 premières entrées du tableaux principal suite à la fusion des 
+divers jeux de données. Pour donner une idée de la magnitude des données, ce tableau avait 
+63560 observations en date du 22 décembre 2021. Heureusement, les noms de variables sont 
+assez descriptif pour comprendre de quoi il s'agit.
 
-*NOTE: ici devrait se trouver des tableaux fais avec kableExtra... problème étant que le package fait des erreurs*
-*je ne peux donc pas l'installer et le faire adéquatement sur ma version de Mac OS*
-*Voir si c'est possible de le rajouter sans RStudio cloud à la fin, peut-être...*
 
-La banque 
+```{r, include=FALSE}
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+paged_table(head(dfVacWorld, n = 100))
+```
+
+## Cohérence entre les différentes sources
+Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afind e les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
+
+Voici quelques manipulations qui nous permettent de vérifier la concordance entre la variable "total_vaccinations_per_hundred" compilée par OWID et le calcul du même taux en utilisant la variable "total_vaccinations" de OWID avec la variable "Population" par pays de Gapminder
+
+```{r, code_folding = TRUE}
+df100 <- subset(dfVacWorld, select = c(location, Continent7, total_vaccinations, 
+                                      total_vaccinations_per_hundred, Population))
+# Création de la nouvelle variable
+df100 <- df100 %>% 
+  mutate(Verif = total_vaccinations/Population*100)
+
+# arrondir à deux chiffres après la virgule pour comparer avec le même type
+# que les données d'OWID
+df100$Verif <- round(df100$Verif, digits =2)
+
+# Création d'une variable de pourcentage d'erreur à des fins comparatives
+df100 <- df100 %>% 
+  mutate(Pourcentage_erreur = (Verif - total_vaccinations_per_hundred)/total_vaccinations_per_hundred*100)
+
+df100NoNA <- subset(df100, Pourcentage_erreur != "NA")
+df100NoNA <- subset(df100, Pourcentage_erreur != "NaN")
+
+#Moyenne du pourcentage d'erreur pour le total d'observations:
+MoyennePErr <- mean(df100NoNA$Pourcentage_erreur)
+
+#Obtenir le nombre d'entrées n'ayant pas le même taux de vaccination par 100 personnes
+df100NoNA <- df100NoNA %>%
+  mutate(vrai_taux = ifelse(total_vaccinations_per_hundred == Verif, "Vrai", "Erroné"))
+  
+vrai_taux_tibble <- df100NoNA %>% count(vrai_taux)
+#VPourcentage d'entrées erronées:
+Pourcentage <- 2140/28690
+
+paged_table(vrai_taux_tibble)
+```
+Il y a donc 
+
 
 
