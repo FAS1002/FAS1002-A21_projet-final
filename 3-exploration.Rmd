@@ -39,6 +39,7 @@ library(lubridate)
 # Manque l'Océanie dans les données de Gapminder associées aux continents
 dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
 dfVacRegion <- read.csv("./Data/Processed/VaccinationPopGDP_continent.csv")
+dfVacMonde <- read.csv("./Data/Processed/VaccinationPopGDP_monde.csv")
 ```
 
 # Analyse statistique et visualisation portant sur la population et la vaccination
@@ -190,7 +191,7 @@ il est possible de voir pourquoi le graphique des doses quotidiennes administré
 
 
 ## Analyses statistiques des dernières données obtenues
-```{r}
+```{r, include=FALSE}
 lastdate <- dfVacWorld %>% 
   summarise(latest = format(max(as.Date(date)))) %>% 
   ungroup()
@@ -218,11 +219,29 @@ DailyMeanWorldWeek <- mean(as.numeric(dfLatestWeek$daily_people_vaccinated), na.
 DailyMeanCan <- mean(as.numeric(dfCan$daily_people_vaccinated), na.rm = TRUE)
 DailyMeanCanWeek <- mean(as.numeric(dfCanWeek$daily_people_vaccinated), na.rm = TRUE)
 
+LatestCanada <- subset(dfCan, date == latestdate)
+DailyCan <- (as.numeric(LatestCanada$daily_people_vaccinated))
 
-# Moyenne canadienne des vaccinations totales quotidiennes de la dernière semaine
-DailyMeanC <- 
+# Différence entre la moyenne de vaccinations au Canada et dans le monde
+DiffWorldCan <- DailyMeanWorld - DailyMeanCan
+DiffWorldCanWeek <- DailyMeanWorldWeek - DailyMeanCanWeek
 
+# Quantité mondiale totale de vaccins pour la dernière journée reçue
+LatestDayDataMonde <- subset(dfVacMonde, date == latestdate)
+VaccinTotMondeDaily <- (as.numeric(LatestDayDataMonde$daily_people_vaccinated))
+
+PourcentCanWorld <- DailyCan/VaccinTotMondeDaily*100
+
+PourcentCanWorldPaste <- paste(PourcentCanWorld, "%")
 ```
+
+Quelques statistiques permettent de mettre en lumière la situation de la campagne vaccinale au Canada à comparer au monde. Dans la dernière semaine, il y a eu en moyenne `r DailyMeanCanWeek` doses de vaccin données au Canada à comparer à `r DailyMeanWorldWeek` dans le monde. Il y a donc une différence de `r DiffWorldCanWeek` doses. Au cours de la pandémie, la moyenne des vaccins par jour est plutôt de `r DailyMeanCan` au Canada et `r DailyMeanWorld` pour une différence de `r DiffWorldCan`. En date de la dernière journée dont les données ont été partagées, le Canada avait vacciné `r DailyCan` personnes en une seule journée. Ce chiffre représente `r PourcentCanWorldPaste` de la totalité mondiale des gens vaccinés en cette même journée, total qui se situe à `r VaccinTotMondeDaily`.
+
+
+
+
+
+
 
 
 
