@@ -1,22 +1,23 @@
 ---
-title: "Titre de votre troisième R Markdown"
+title: "Exploration statistique et Visualisation"
 description: | 
-  Petite description du contenu de cette page
+  Analyses statistiques et visualisations portant sur les données de vaccination contre la covid-19
+  jumelées aux données de population et du P.I.B. à l'échelle mondiale.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
 author:
   - first_name: "Prénom"
     last_name: "Nom"
-    url: https://github.com/votre-username
+    url: https://github.com/EmmaPep/
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
     affiliation_url: https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/
     # changer pour votre propre orcid id
     # https://orcid.org/ pour vous inscrire.
-    orcid_id: 0000-0000-0000-0000
+    # orcid_id: 0000-0000-0000-0000
 # Changer pour votre propre URL si jamais quelqu'un vous cite!
-citation_url: https://fas1002.github.io/FAS1002_projet-final
+citation_url: https://emmapep.github.io/FAS1002_projet-final
 # Inclure les références que vous utilisez dans vos rapports
 # dans un fichier biblio.bib. Je conseille Zotero pour construire
 # ce fichier ou d'utiliser le package citr dans RStudio.
@@ -29,15 +30,77 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Un peu d'interactivité pour le plaisir!
+```{r, include=FALSE}
+library(tidyverse)
+library(viridis)
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
 
-```{r map, layout = "l-page"}
-library(leaflet)
-leaflet() %>%
-  addTiles() %>%
-  addMarkers(lng=174.768, lat=-36.852, popup="Là où R est né") %>%
-  addProviderTiles(providers$Stamen.Watercolor)
+
 ```
+
+## Analyse statistique portant sur la population et la vaccination
+Quel est le portrait mondial de la population protégée?
+
+```{r}
+plot1 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_vaccinations, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 14))+
+  theme(axis.title.y = element_text(family = "Arial",size = 14))+
+  theme(axis.text.x = element_text(family = "Arial",size = 14))+
+  theme(axis.text.y = element_text(family = "Arial",size = 14))+
+  labs(y = "Vaccinations totales",
+       x = "Date",
+       title = "Nombre de vaccins par continent de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot1
+```
+Le portrait épidémiologique de la prévention de la covid-19 à l'échelle mondial est certe un sujet délicat,
+mais il reste qu'il est très intéressant de par son actualité et par sa portée. Ici, il est possible d'observer
+par continent les quantités de doses administrée depuis la première dose en décembre 2020 jusqu'à aujourd'hui. Il est possible de remarquer que deux continents, l'Afrique et l'Océanie, sont difficilement retraçable sur le graphique dû à leur petit nombre de dose comparés aux autres continent. Il y a bien évidement un effet de population qui varie grandement d'un continent à l'autre, mais il y a ausi des enjeux économiques et sociaux qui influencent ces disparités. Il serait donc intéressant de refaire ce graphique avec une proportion soit la variable de vaccins administrés par 100 habitants.
+
+```{r}
+plot2 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_vaccinations_per_hundred, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 14))+
+  theme(axis.title.y = element_text(family = "Arial",size = 14))+
+  theme(axis.text.x = element_text(family = "Arial",size = 14))+
+  theme(axis.text.y = element_text(family = "Arial",size = 14))+
+  labs(y = "Vaccinations par 100 habitants",
+       x = "Date",
+       title = "Nombre de vaccins par 100 habitants pour chaque continent de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot2
+```
+Ainsi, une fois les vaccinations rapportées par 100 habitants, nous remarquons que la distribution des trois continents les plus vaccinés (l'Asie, l'Europe et l'Amérique du nord) est changée avec l'Europe qui prend le dessus sur le reste des continents bien que le nombre de personnes vaccinées en Asie par rapport aux autres Continent reste important. Encore une fois il est difficile de distinguer l'Afrique qui se situe en haut en bleu foncé et dont les doses de vaccins données par 100 semblent être moins que dans les autres continents.
+
+Maintenant que nous avons une idée visuelle de la distribution par continent dans le temps, il serait intéressant de regarder les statistiques de ces données.
+
+
+
+
+
+
+
 
 
 ## Peut-être que ça vous inspirera!
