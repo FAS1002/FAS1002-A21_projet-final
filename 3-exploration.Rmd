@@ -33,15 +33,19 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, include=FALSE}
 library(tidyverse)
 library(viridis)
+library(ggridges)
+library(lubridate)
+#Utilisation du csv par pays pour les continent, car plus exhaustif
+# Manque l'Océanie dans les données de Gapminder associées aux continents
 dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
-
-
+dfVacRegion <- read.csv("./Data/Processed/VaccinationPopGDP_continent.csv")
 ```
 
-## Analyse statistique portant sur la population et la vaccination
-Quel est le portrait mondial de la population protégée?
+# Analyse statistique et visualisation portant sur la population et la vaccination
+*Quel est le portrait mondial de la population protégée?*
 
-```{r}
+## Doses de vaccins par continents
+```{r, code_folding=TRUE}
 plot1 <- ggplot(data = dfVacWorld,
                 aes(x = as.Date(date), y = total_vaccinations, fill = Continent7))+
   geom_col()+
@@ -69,7 +73,9 @@ Le portrait épidémiologique de la prévention de la covid-19 à l'échelle mon
 mais il reste qu'il est très intéressant de par son actualité et par sa portée. Ici, il est possible d'observer
 par continent les quantités de doses administrée depuis la première dose en décembre 2020 jusqu'à aujourd'hui. Il est possible de remarquer que deux continents, l'Afrique et l'Océanie, sont difficilement retraçable sur le graphique dû à leur petit nombre de dose comparés aux autres continent. Il y a bien évidement un effet de population qui varie grandement d'un continent à l'autre, mais il y a ausi des enjeux économiques et sociaux qui influencent ces disparités. Il serait donc intéressant de refaire ce graphique avec une proportion soit la variable de vaccins administrés par 100 habitants.
 
-```{r}
+
+## Vaccins rapportés par 100 habitants
+```{r, code_folding=TRUE}
 plot2 <- ggplot(data = dfVacWorld,
                 aes(x = as.Date(date), y = total_vaccinations_per_hundred, fill = Continent7))+
   geom_col()+
@@ -93,48 +99,104 @@ plot2 <- ggplot(data = dfVacWorld,
 
 plot2
 ```
-Ainsi, une fois les vaccinations rapportées par 100 habitants, nous remarquons que la distribution des trois continents les plus vaccinés (l'Asie, l'Europe et l'Amérique du nord) est changée avec l'Europe qui prend le dessus sur le reste des continents bien que le nombre de personnes vaccinées en Asie par rapport aux autres Continent reste important. Encore une fois il est difficile de distinguer l'Afrique qui se situe en haut en bleu foncé et dont les doses de vaccins données par 100 semblent être moins que dans les autres continents.
+Ainsi, une fois les vaccinations rapportées par 100 habitants, nous remarquons que la distribution des trois continents les plus vaccinés (l'Asie, l'Europe et l'Amérique du nord) est changée avec l'Europe qui prend le dessus sur le reste des continents bien que le nombre de personnes vaccinées en Asie par rapport aux autres Continent reste important. Encore une fois il est difficile de distinguer l'Afrique qui se situe en haut en bleu foncé et dont les doses de vaccins données par 100 semblent être moins que dans les autres continents. 
 
-Maintenant que nous avons une idée visuelle de la distribution par continent dans le temps, il serait intéressant de regarder les statistiques de ces données.
-
-
+Note: En observant les écarts à intervale constant des lignes blanches dénotant une absence de toutes données pour cette journée, il est aussi possible de voir l'intervale assez régulier de récolte des données par les diférentes instances (gouvernements, OMS, etc.) et colligés par Our World in Data. Ce simple fait est pourtant un bon indicateur d'une surveillance épidémiologique constante et adéquate.
 
 
 
+## Évolution des doses journalières
+Faisons le même exercice avec les doses journalières cette fois
 
+```{r, include=FALSE}
+plot3 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = daily_vaccinations, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations quotidiennes",
+       x = "Date",
+       title = "Nombre de vaccins quotidiens par continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
 
-
-
-## Peut-être que ça vous inspirera!
-
-```{r plotly}
-library(plotly)
-library(gapminder)
-df <- gapminder
-
-fig <- df %>%
-  plot_ly(
-    x = ~ gdpPercap,
-    y = ~ lifeExp,
-    size = ~ pop,
-    color = ~ continent,
-    frame = ~ year,
-    text = ~ country,
-    hoverinfo = "text",
-    type = 'scatter',
-    mode = 'markers',
-    width = "100%",
-    height = 600
-  )
-
-fig <- fig %>% layout(xaxis = list(type = "log"))
-
-fig <- fig %>%
-  animation_button(
-    x = 0, xanchor = "left", y = -0.15, yanchor = "bottom"
-  )
-
-fig
+plot3
 ```
 
+```{r, include=FALSE}
+plot4 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = daily_vaccinations_per_million, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations quotidiennes",
+       x = "Date",
+       title = "Nombre de vaccins quotidiens par million selon le continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot4
+```
+Et voilà enfin une visualisation qui permet de bien voir la situation en Afrique et en Océanie. En rapportant le nombre de doses quotidienne de vaccins par million d'habitants, nous pouvons observer l'évolution de la distribution des doses qui a connu son appogée au cours de l'été 2021. Avec le temps, il sera possible de voir si la tendance à la baisse se maintient ou si l'arrivée des doses supplémentaires (boosters) influencera la distribution.
+
+
+```{r, include=FALSE}
+plot4 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_boosters_per_hundred, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Boosters par 100 d'habitants",
+       x = "Date",
+       title = "Nombre de boosters administrés selon le continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot4
+```
+
+En gardant la même échelle de date malgré l'autorisation données pour l'utilisation de "boosters" à l'été 2021,
+il est possible de voir pourquoi le graphique des doses quotidiennes administrées toute catégorie continue à être bien rempli à la fin de l'année 2021 malgré une légère baisse, l'arrivée des troisièmes doses joue sur la distribution en faveur notamment de l'Europe qui a de loin la plus grade proportion de troisième dose depuis l'automne 2021. 
+
+
+```{r, include=FALSE}
+
+
+
+```
+
+
+
+## Statistiques
+Maintenant que nous avons une idée visuelle de la distribution par continent dans le temps, il serait intéressant de regarder quelques statistiques de ces données.
 
