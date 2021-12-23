@@ -36,22 +36,32 @@ ISDS](https://github.com/osumontreal/template_r).
 ```
 
 
-## Documents dans le répertoire
+## Documents et dossiers dans le répertoire
+Plusieurs documents et dossiers constituent se répertoire, les plus importants sont décrits ici:  
+
+**R**
+Dossier contenant les scripts utilisés dans les documents Rmarkdown
 
 **1-intro.Rmd**
 Document Rmarkdown comprenant l'introduction et la description du projet
 
 **2-import.Rmd**
+Document Rmarkdown comprenant les explications des jeux de données utilisés, 
+leur provenance, leur téléchargement, leur traitement et une exploration sommaire.
 
 **3-exploration.Rmd**
+Document Rmarkdown comprenant les explorations statistiques et les visualisations
+attachées au projet. 
 
-
+**contact.Rmd**
+Document Rmarkdown comprenant les informations de la personne ayant effectué le rapport. 
 
 **FAS1002_projet-final.Rproj**
 Session de travail du projet dans RStudio
 
-
-
+**Autres documents**
+Les autres documents se trouvant dans ce répertoire proviennent des différents scripts et Rmarkdowns. 
+Ils sont notamment pr.sent pour générer le site web associé à ce répertoire.
 
 
 
@@ -137,7 +147,7 @@ fonction des fichiers, veuillez consulter le site web de
 [distill](https://rstudio.github.io/distill/). Tout y est pour modifier le
 look, etc.
 
-## Principaux packages R utilisés dans l'exemple:
+## Principaux packages R utilisés dans ce projet
 
 -   R Core Team (2020). R: A language and environment for statistical
     computing. R Foundation for Statistical Computing, Vienna, Austria.
@@ -149,14 +159,3 @@ look, etc.
 
 -   H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
     New York, 2016. <https://ggplot2.tidyverse.org>
-
--   Joe Cheng, Bhaskar Karambelkar and Yihui Xie (2021). leaflet: Create
-    Interactive Web Maps with the JavaScript 'Leaflet' Library. R package
-    version 2.0.4.1. <https://CRAN.R-project.org/package=leaflet>
-
--   C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and
-    shiny. Chapman and Hall/CRC. Florida, 2020. <https://plotly-r.com>
-
--   Jennifer Bryan (2017). gapminder: Data from Gapminder. R package version
-    0.3.0. <https://CRAN.R-project.org/package=gapminder>
-
