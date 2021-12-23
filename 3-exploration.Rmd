@@ -323,3 +323,4 @@ Terminons avec deux simples visualisations qui mettent en contexte les tendances
 
 Ainsi les données récoltées permettent de faire un survol de la situation vaccinale mondiale tout en confirmant la validité de la surveillance épidémiologique et statistique en temps de pandémie.
 
+Les graphiques ont été fait avec le @wickham_ggplot2_2016
