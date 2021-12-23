@@ -2,20 +2,17 @@
 # Vous pouvez vous servir de cette page pour parler de vous.
 title: "À propos"
 description: |
-    Lisez ci-dessous pour en apprendre plus sur la personne derrière ce rapport.
+    Lisez ci-dessous pour en apprendre plus sur Emmanuelle, la personne derrière ce rapport.
 toc: false
 ---
 
 
 ## Bio 
 
-Le [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) est une introduction à la programmation en sciences sociales avec [R](https://www.r-project.org/), un langage de programmation et un environnement statistique populaire pour analyser de données. Principalement convoité pour ses fonctionnalités statistiques avancées, R s’avère autant utilisé en recherche qu’en industrie, ce qui confère un avantage concret à son apprentissage. À ce sujet, R se prête bien à l’apprentissage de la programmation en raison de:
+Ce rapport a été préparé par Emmanuelle Pépin en tant qu'étudiante du [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) 
 
-* sa nature libre et gratuite;
-* sa polyvalence de fonctionnalités;
-* sa popularité et sa variété de domaines d’application;
-* la diversité de ressources et d’aide disponible gratuitement sur le Web;
-* sa vibrante communauté reconnue pour son inclusivité et son support bienveillant. 
+Bien qu'Emmanuelle sois assistante de recherche en centre hospitalier, le cours FAS1002 est sa première aventure du côté de la programmation. Néophyte absolue à ce niveau il y a quelques semaines, elle a pu essayer de produire des projets en R depuis, dont celui-ci! La tâche n'est pas toujours évidente, mais l'aventure est toujours enrichissante.
+
 
 <aside>
 ![](static/images/FAS1002.png){width=80%}
@@ -28,6 +25,5 @@ Le [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-10
 
 **Université** | [Université de Montréal](https://umontreal.ca)
 
-**Courriel** | fas1002@samuelguay.ca
 
 
