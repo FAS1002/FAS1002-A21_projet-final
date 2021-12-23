@@ -53,13 +53,14 @@ plot1 <- ggplot(data = dfVacWorld,
   theme(legend.box.background = element_rect(size=0.3))+
   theme(legend.position = c(.05, .95),
         legend.justification = c("left", "top"))+
-  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 14))+
-  theme(axis.title.y = element_text(family = "Arial",size = 14))+
-  theme(axis.text.x = element_text(family = "Arial",size = 14))+
-  theme(axis.text.y = element_text(family = "Arial",size = 14))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
   labs(y = "Vaccinations totales",
        x = "Date",
-       title = "Nombre de vaccins par continent de la première dose à aujourd'hui",
+       title = "Nombre de vaccins par continent",
+       subtitle = "de la première dose à aujourd'hui",
        fill = "Continents")
 
 plot1
@@ -80,13 +81,14 @@ plot2 <- ggplot(data = dfVacWorld,
   theme(legend.box.background = element_rect(size=0.3))+
   theme(legend.position = c(.05, .95),
         legend.justification = c("left", "top"))+
-  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 14))+
-  theme(axis.title.y = element_text(family = "Arial",size = 14))+
-  theme(axis.text.x = element_text(family = "Arial",size = 14))+
-  theme(axis.text.y = element_text(family = "Arial",size = 14))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
   labs(y = "Vaccinations par 100 habitants",
        x = "Date",
-       title = "Nombre de vaccins par 100 habitants pour chaque continent de la première dose à aujourd'hui",
+       title = "Nombre de vaccins par 100 habitants par continent",
+       subtitle = "de la première dose à aujourd'hui",
        fill = "Continents")
 
 plot2
