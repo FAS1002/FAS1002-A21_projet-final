@@ -15,6 +15,9 @@ library(lubridate)
 VacFile <- list.files("./Data/Raw/", pattern = "Vaccination")
 DataVaccin <- read.csv(paste0("./Data/Raw/", VacFile), stringsAsFactors = TRUE)
 
+#Au départ, il n'y avait pas de colonne avec une valeur X, cela semble jouer 
+# avec mon code qui était fonctionnel il y a 2 heures... Ainsi
+DataVaccin <- subset(DataVaccin, select = -(X))
 
 # 1.2 Gapminder
 # 1.2.1 Données de population
@@ -54,13 +57,12 @@ DataVaccin$date <- as_date(DataVaccin$date)
 #Obtenir les vaccins par région et enlever les autres niveaux
 RegionVaccin <- subset(DataVaccin, geo=="OWID_AFR" | geo=="OWID_ASI" | geo=="OWID_EUR" | geo=="OWID_NAM" | geo=="OWID_OCE" | geo=="OWID_SAM")
 
-levels(droplevels(RegionVaccin$location))
  
 # Mettre les données mondiales dans un autre objet avant de les enlever
 # Enlever la colonne geo (info. redondante)
 # location gardée pour le moment au cas où serait utile
 WorldVaccin <- subset(DataVaccin, geo == "OWID_WRL")
-WorldVaccin <- subset(WorldVaccin, select = -c(2))
+WorldVaccin <- subset(WorldVaccin, select = -(geo))
 
 # Utiliser stringr pour sélectionner les codes iso (geo) OWID
 # qui correspondent à des régions, sous-catégories, etc. et les enlever du df principal
