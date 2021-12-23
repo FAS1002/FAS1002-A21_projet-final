@@ -189,10 +189,63 @@ En gardant la même échelle de date malgré l'autorisation données pour l'util
 il est possible de voir pourquoi le graphique des doses quotidiennes administrées toute catégorie continue à être bien rempli à la fin de l'année 2021 malgré une légère baisse, l'arrivée des troisièmes doses joue sur la distribution en faveur notamment de l'Europe qui a de loin la plus grade proportion de troisième dose depuis l'automne 2021. 
 
 
+## Analyses statistiques des dernières données obtenues
+```{r}
+lastdate <- dfVacWorld %>% 
+  summarise(latest = format(max(as.Date(date)))) %>% 
+  ungroup()
+
+latestdate <- max(as.Date(dfVacWorld$date))
+latestdate1 <- max(as.Date(dfVacWorld$date))-1
+latestdate2 <- max(as.Date(dfVacWorld$date))-2
+latestdate3 <- max(as.Date(dfVacWorld$date))-3
+latestdate4 <- max(as.Date(dfVacWorld$date))-4
+latestdate5 <- max(as.Date(dfVacWorld$date))-5
+latestdate6 <- max(as.Date(dfVacWorld$date))-6
+
+
+dfLatest <- subset(dfVacWorld, date == latestdate)
+
+dfLatestWeek <- subset(dfVacWorld, date == latestdate )
+
+dfCan <- subset(dfVacWorld, location == "Canada")
+
+# Moyenne mondiale des vaccinations totales quotidiennes de la dernière semaine
+DailyMeanW <- mean(dfLatest$daily_vaccinations)
+
+# Moyenne canadienne des vaccinations totales quotidiennes de la dernière semaine
+DailyMeanC <- 
+
+```
+
+
+
+## Portrait canadien épidémiologique de la prévention de la covid
+
 ```{r, include=FALSE}
 
 
-
+plot5 <- ggplot(data = dfCan,
+                aes(x = as.Date(date), y = people_fully_vaccinated, fill = Population))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations quotidiennes",
+       x = "Date",
+       title = "Nombre de vaccins quotidiens par million selon le continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+plot5
 ```
 
 
