@@ -27,6 +27,8 @@ ISDS](https://github.com/osumontreal/template_r).
 ├── _footer.html
 ├── index.Rmd
 ├── README.md
+├── R
+├── Data
 ├── references.bib
 ├── _site.yml
 └── static
@@ -71,52 +73,6 @@ Session de travail du projet dans RStudio
 **Autres documents**
 Les autres documents se trouvant dans ce répertoire proviennent des différents scripts et Rmarkdowns. 
 Ils sont notamment présents pour générer le site web associé à ce répertoire.
-
-
-
-
-
-5.  Enfin, pour mettre à jour votre site web, la façon le plus simple est de
-    regénérer le contenu de votre site localement (sur votre ordinateur) en
-    cliquant sur `Build Website` ou en utilisant la commande
-    `rmarkdown::render_site(encoding = 'UTF-8')` dans la console. Il vous
-    faudra *commit* vos changements et de *push* le tout sur GitHub.
-
-## Structure du répertoire
-
-``` bash
-├── 1-intro.Rmd
-├── 2-import.Rmd
-├── 3-exploration.Rmd
-├── contact.Rmd
-├── docs
-├── FAS1002_projet-final.Rproj
-├── _footer.html
-├── index.Rmd
-├── README.md
-├── references.bib
-├── _site.yml
-└── static
-    ├── images
-    │   └── FAS1002.png
-    └── theme.css
-```
-
-Tous les fichiers `.Rmd` seront amenés à être modifiés; ils ne sont que des
-exemples très, très brefs. Ceux-ci constituent la base de votre rapport. Vous
-pouvez les nommer et les utiliser comme vous les voulez. Ainsi, vous pourrez
-diviser en différentes parties le processus d'analyses de façons stratégiques
-au lieu d'avoir un seul document avec des milliers de lignes. Le nombre est
-également arbitraire, à vous de décider la quantité qui vous convient.
-Cependant, pour faciliter le travail avec les données, il vous faudra créer
-quelques dossiers supplémentaires en suivant la structure du [template
-ISDS](https://github.com/osumontreal/template_r), notamment pour les dossiers
-`data`, `R` et `figures`.
-
-Pour plus de détails sur la structure et les modifications possibles en
-fonction des fichiers, veuillez consulter le site web de
-[distill](https://rstudio.github.io/distill/). Tout y est pour modifier le
-look, etc.
 
 ## Principaux packages R utilisés dans ce projet
 
