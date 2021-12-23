@@ -40,7 +40,6 @@ source("R/Ouverture-donnees-raw.R", local = knitr::knit_global())
 #Packages utilisés:
 library(tidyverse)
 library(lubridate)
-library(kableExtra)
 ```
 
 # Données
@@ -105,5 +104,12 @@ l'Afrique, les Amériques, l'Asie et l'Europe.
 
 Mais trève de descriptif! Voici quelques tableaux pour vous montrer les données.
 
-Tout d'abord le tableau 
+Tout d'abord les tableaux des données:
+
+*NOTE: ici devrait se trouver des tableaux fais avec kableExtra... problème étant que le package fait des erreurs*
+*je ne peux donc pas l'installer et le faire adéquatement sur ma version de Mac OS*
+*Voir si c'est possible de le rajouter sans RStudio cloud à la fin, peut-être...*
+
+La banque 
+
 
