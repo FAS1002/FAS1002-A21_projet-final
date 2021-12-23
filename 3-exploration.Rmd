@@ -238,43 +238,38 @@ PourcentCanWorldPaste <- paste(PourcentCanWorld, "%")
 Quelques statistiques permettent de mettre en lumière la situation de la campagne vaccinale au Canada à comparer au monde. Dans la dernière semaine, il y a eu en moyenne `r DailyMeanCanWeek` doses de vaccin données au Canada à comparer à `r DailyMeanWorldWeek` dans le monde. Il y a donc une différence de `r DiffWorldCanWeek` doses. Au cours de la pandémie, la moyenne des vaccins par jour est plutôt de `r DailyMeanCan` au Canada et `r DailyMeanWorld` pour une différence de `r DiffWorldCan`. En date de la dernière journée dont les données ont été partagées, le Canada avait vacciné `r DailyCan` personnes en une seule journée. Ce chiffre représente `r PourcentCanWorldPaste` de la totalité mondiale des gens vaccinés en cette même journée, total qui se situe à `r VaccinTotMondeDaily`.
 
 
+## Statistiques sur les vaccins vs le revenu par habitant
+Avec les données que nous avons rassemblées, il est également possible de comparer les pays en fonction de certains paramètres économiques. Regardons ici s'il y a une concordance entre un le revenu par habitant et le nombre de doses de vaccins selon la population. Regardons les dernières informations reçues pour les 10 pays ayant le plus haut revenu par habitant vs les 10 pays ayant les plus bas revenus par habitants. Encore une fois, procédons à l'étude de la moyenne et ajoutons cette fois les maximums et minimums de chaque catégories.
+
+```{r}
+dfHighest10 <- dfLatest[with(dfLatest, order(-Income.per.person)),]
+dfHighest10 <- dfHighest10[1:10,]
+
+dfLowest10 <- dfLatest[with(dfLatest, order(Income.per.person)),]
+dfLowest10 <- dfLowest10[1:10,]
+
+MeanHighest10 <- mean(as.numeric(dfHighest10$Income.per.person), na.rm = TRUE)
+MaxValueHighest10 <- max(as.numeric(dfHighest10$Income.per.person))
+MinValueHighest10 <- min(as.numeric(dfHighest10$Income.per.person))
+
+MeanLowest10 <- mean(as.numeric(dfLowest10$Income.per.person), na.rm = TRUE)
+MaxValueLowest10 <- max(as.numeric(dfLowest10$Income.per.person))
+MinValueLowest10 <- min(as.numeric(dfLowest10$Income.per.person))
+
+MeanHighest10Vac <- mean(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred), na.rm = TRUE)
+MaxValueHighest10Vac <- max(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred))
+MinValueHighest10Vac <- min(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred))
+
+MeanLowest10Vac <- mean(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred), na.rm = TRUE)
+MaxValueLowest10Vac <- max(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred))
+MinValueLowest10Vac <- min(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred))
+
+PourcentagediffLowHigh <- MeanLowest10Vac/MeanHighest10Vac*100
 
 
-
-
-
-
-
-## Portrait canadien épidémiologique de la prévention de la covid
-
-```{r, include=FALSE}
-
-
-plot5 <- ggplot(data = dfCan,
-                aes(x = as.Date(date), y = people_fully_vaccinated, fill = Population))+
-  geom_col()+
-  scale_fill_viridis_d(option = "C")+
-  theme_classic()+
-  theme(axis.title.x = element_text(family = "Arial"))+
-  theme(title = element_text(family = "Arial", face = "bold"))+
-  theme(legend.title = element_text(family = "Arial",face = "bold"))+
-  theme(legend.box.background = element_rect(size=0.3))+
-  theme(legend.position = c(.05, .95),
-        legend.justification = c("left", "top"))+
-  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
-  theme(axis.title.y = element_text(family = "Arial",size = 12))+
-  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
-  theme(axis.text.y = element_text(family = "Arial",size = 12))+
-  labs(y = "Vaccinations quotidiennes",
-       x = "Date",
-       title = "Nombre de vaccins quotidiens par million selon le continent",
-       subtitle = "de la première dose à aujourd'hui",
-       fill = "Continents")
-plot5
 ```
 
+Après quelques calculs il est possible d'observer que la moyenne de gens adéquatement vacciné des 10 pays ayant le moins haut taux de revenu par habitant est de `r MeanLowest10Vac` ce qui est équivalent à `r PourcentagediffLowHigh%` à comparer à la moyenne de `r MeanHighest10Vac` des 10 pays ayant le plus haut taux de revenu par habitant. Il y a donc une différence marquée entre le taux de revenu par habitant et les vaccins administrés. Évidement, plusieurs facteurs entre en ligne de compte, mais cela signifie qu'il est possible de se demander comment appuyer les nations moins nanties de façon adéquate afin de faire une prévention épidémiologique adéquate dans cette situation hors du commun qui touche le monde entier.   
 
-
-## Statistiques
-Maintenant que nous avons une idée visuelle de la distribution par continent dans le temps, il serait intéressant de regarder quelques statistiques de ces données.
+Ainsi les données récoltées permettent de faire un survol de la situation vaccinale mondiale tout en confirmant la validité de la surveillance épidémiologique et statistique en temps de pandémie.
 
