@@ -206,12 +206,18 @@ latestdate6 <- max(as.Date(dfVacWorld$date))-6
 
 dfLatest <- subset(dfVacWorld, date == latestdate)
 
-dfLatestWeek <- subset(dfVacWorld, date == latestdate )
+dfLatestWeek <- subset(dfVacWorld, date == latestdate | date == latestdate1 | date == latestdate2 | date == latestdate3 | date == latestdate4 | date == latestdate5 | date == latestdate6 )
 
 dfCan <- subset(dfVacWorld, location == "Canada")
+dfCanWeek <- subset(dfCan, date == latestdate | date == latestdate1 | date == latestdate2 | date == latestdate3 | date == latestdate4 | date == latestdate5 | date == latestdate6 )
 
 # Moyenne mondiale des vaccinations totales quotidiennes de la dernière semaine
-DailyMeanW <- mean(dfLatest$daily_vaccinations)
+DailyMeanWorld <- mean(as.numeric(dfLatest$daily_people_vaccinated), na.rm = TRUE)
+DailyMeanWorldWeek <- mean(as.numeric(dfLatestWeek$daily_people_vaccinated), na.rm = TRUE)
+
+DailyMeanCan <- mean(as.numeric(dfCan$daily_people_vaccinated), na.rm = TRUE)
+DailyMeanCanWeek <- mean(as.numeric(dfCanWeek$daily_people_vaccinated), na.rm = TRUE)
+
 
 # Moyenne canadienne des vaccinations totales quotidiennes de la dernière semaine
 DailyMeanC <- 
