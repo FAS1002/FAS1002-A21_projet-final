@@ -1,22 +1,22 @@
 ---
-title: "Titre de votre deuxième R Markdown"
+title: "Importation et manipulation des données"
 description: | 
-  Petite description du contenu de cette page
+  Détails des manipulations programmées en R concernant l'importation suivi de la manipulation des données utilisées   à des fins d'analyses dans le cadre du travail final pour le cours FAS1002 de l'automne 2021.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
 author:
-  - first_name: "Prénom"
-    last_name: "Nom"
-    url: https://github.com/votre-username
+  - first_name: "Emmanuelle"
+    last_name: "Pépin"
+    url: https://github.com/EmmaPep
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
     affiliation_url: https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/
     # changer pour votre propre orcid id
     # https://orcid.org/ pour vous inscrire.
-    orcid_id: 0000-0000-0000-0000
+    # orcid_id: 0000-0000-0000-0000
 # Changer pour votre propre URL si jamais quelqu'un vous cite!
-citation_url: https://fas1002.github.io/FAS1002_projet-final
+citation_url: https://emmapep.github.io/FAS1002_projet-final/
 # Inclure les références que vous utilisez dans vos rapports
 # dans un fichier biblio.bib. Je conseille Zotero pour construire
 # ce fichier ou d'utiliser le package citr dans RStudio.
@@ -29,10 +29,138 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Vous pouvez maintenant importer et travailler sur vos données, comme celles de @mathieu2021.
+```{r, include=FALSE}
+# Importation du script de téléchargement des données
+source("R/Telechargement.R", local = knitr::knit_global())
+source("R/Ouverture-donnees-raw.R", local = knitr::knit_global())
+```
+
+```{r, include=FALSE}
+#Packages utilisés:
+library(tidyverse)
+library(lubridate)
+library(rmarkdown)
+```
+
+# Données
+Les données utilisées dans le présent travail proviennent de deux sources différentes, 
+Our World in Data et Gapminder. Ces organisations ont comme mission d'utiliser les données 
+afin d'illustrer de façon compréhensible et excitante les problèmes et enjeux du monde actuel
+tout en appliquant des principes de données ouvertes. Bien qu'elles aient chacunes leur propre méthodologie,
+ces organisations récoltent des données de diverses sources afin de dresser le portrait le plus représetatif possible de plusieurs enjeux et sujets.   
+
+Vu la quantité infinie d'information disponible, il est toutefois important de bien cerner
+les données à utiliser. La présente section décrit les jeux de données retenus
+ainsi que la démarche effectuée pour les préparer.   
+
+## Our World in Data (OWID)
+### Données sur la vaccination (covid-19)
+La banque de données principale de cette étude provient de l'organisme [Our World in Data](https://ourworldindata.org/) qui est présentement très actif pour colliger et visualiser les données de la pandémie en cours. Nous nous attarderons ici aux données sur la vaccination. Contenant plusieurs données sur le suivi du statut vaccinal à l'échelle mondiale, ce jeu de données peut d'ailleurs être consulté sur [leur répertoire](https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations) qui est mis à jour quotidiennement. Plusieurs visualisations fort intéressantes et très détaillées sont également disponibles sur [leur site](https://ourworldindata.org/covid-vaccinations) où différents autres sujets sont aussi abordés. Ici, toutefois, nous nous servirons de cette banque de données à des fins d'exploration des données de la vaccination uniquement. Elle sera également combinée avec les banques de données qui suivent.   
+
+**La banque de données de vaccination en quelques points**  
+- Disponible en format .csv sur GitHub  
+- Elle contient 16 variables  
+- Des observations y sont ajoutées quotidiennement par OWID  
+- Les observations sont classées selon le pays ou une région définie par OWID  
+  - Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3  
+  - Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
+    Ce code servira d'ailleurs à fusionner les différentes banques de données.
+
+## Gapminder  
+### Données sur la population mondiale et le produit intérieur brut (P.I.B.)  
+L'organisme [Gapminder](https://www.gapminder.org/) rend disponible plusieurs jeux de données concernant divers enjeux et paramètres sociaux, économiques et même épidémiologiques. Ils rendent également disponibles leurs données en libre accès. Deux banques de données tirées de leur site sont utilisées pour ce travail. Tout d'abord une banque concernant la [population mondiale](https://docs.google.com/spreadsheets/d/14_suWY8fCPEXV0MH7ZQMZ-KndzMVsSsA5HdR-7WqAC0/edit#gid=501532268) et une seconde comprenant le [produit intérieur brute par habitant](https://docs.google.com/spreadsheets/d/1gZZ28UiWCVue-tFHMEVOvSO58x7x-w20E23l1wZTR3E/edit#gid=501532268). Cela servira à mettre en relation divers paramètres sociaux avec la banque de données de vaccination d'OWID.    
+
+**Les banques de données de population et de P.I.B. en quelques points**  
+- Disponibles en format .xlsx sur Google Doc  
+- Les fichiers Excel contiennent différentes pages (monde, par pays, par continent, per capita, etc. qui peuvent être traitées séparément  
+- Les mise-à-jour ne sont pas constantes, mais la date de la dernière mise-à-jour est toujours disponible sur la première page nommée "About" du fichier Excel.  
+  - Population, dernière mise à jour  disponible en date du 22 décembre 2021 : 10 décembre 2019  
+  - GDP, dernière mise à jour disponible en date du 22 décembre 2021 : 30 avril 2021  
+- Particularité de Gapminder: leurs banques de données contiennent les prévisions pour les années à venir d'où l'importance de la date de mise-à-jour. Ainsi, les informations de population de 2020 et 2021, par exemple, devraient changer lorsque l'information sera disponible. Cette particularité est à garder en tête lorsque nous regarderons les résultats de certaines analyses.  
+
+# Traitement des données
+## Importation/téléchargement des données : données brutes
+Toutes les données utilisées dans le présent rapport sont disponibles dans le [répertoire GitHub associé à ce projet](https://github.com/EmmaPep/FAS1002_projet-final). Les données brutes ont été déposées dans le dossier Raw situé à l'intérieur du dossier Data. Il s'agit des données provenant directement de OWID et Gapminder et qui n'ont pas encore été traitées. Un script a été réalisé afin de permettre la mise-à-jour des fichiers. Ainsi, les données provenant de OWID sont téléchargées quotidiennement alors que celles de Gapminder sont téléchargées dans le répertoire à tous les mois lorsque le script est utilisé pour générer le site web actuel. Le tout est possible dû au fait que la sauvegarde des fichiers a été codée en incluant la date dans le titre. Il est alors possible d'extraire la date et de la comparée à la date d'aujourd'hui. Se faisant, il a été possible de coder une règle de téléchargement conditionnel par rapport à la date en utilisant une expression particulière permettant de sélectionner la date de sauvegarde du fichier se trouvant dans le titre. Une fois la nouvelle banque de données téléchargée, le script efface également la version désuette.  
+
+##Préparation des données: des données brutes aux données traitées
+Les trois jeux de données brutes se situant dans le dossier Data/Raw sont utilisées dans un second script permettant de nettoyer et rassembler différents tableaux de données. 
+
+### Données sur la vaccination (covid-19)
+Le nettoyage effectué sur les données provenant d'Our World in Data consistait surtout à uniformiser les divers appelations de régions afin de pouvoir rattacher ces données à celles de Gapminder. Heureusement, les deux organismes utilisent les notations ISO-3166 alpha-3 ce qui permet, après une harmonisation des noms de variables de bien identifier les régions et associer les données adéquatement. 
+
+Par la suite, la banque de donnée a été séparée en trois jeux de données différents soit les informations de vaccination par pays, par continent et pour le monde. Ce faisant, il a donc été possible de séparer un fichier .csv en trois parties équivalents aux données disponibles par Gapminder.
+
+### Données sur la population mondiale et le produit intérieur brut (P.I.B.) 
+Encore une fois un travail d'harmonisation des noms de variables et des formats de certaines chaines de caractères a été effectué afin de permettre la fusion entre les données de Gapminder et celles d'OWID. Les données extraites des fichiers Excel brutes proviennent de trois feuilles différentes et correspondent à la population par pays, contient et pour le monde ainsi que le P.I.B. selon les même catégories. Les données de vaccination d'OWID débutant en décembre 2020, seules les années 2020, 2021 et 2022 ont été gardées dans les données de Gapminder. Ce choix s'explique par le fait que le script pourra être utilisé après l'élaboration de ce rapport à la fin décembre ce qui nous amènerait en 2022. Tel que mentionné plus haut, les années à venir sont modélisées par Gapminder ce qui explique la disponibilité de certaines données pour 2022, en 2021.
+
+### Les codes ISO
+Un troisième jeu de données contenant les codes ISO standardisés a été utilisé, il a permit d'introduire une nouvelle variable "Continent" au jeu de données sur la vaccination. Le fichier .csv utilisé est disponible dans le dossier Data/Raw du répertoire GitHub présent projet et provient du site [Our World in Data](https://ourworldindata.org/grapher/continents-according-to-our-world-in-data) ce qui permet une certaine uniformité entre les données. À noter que les données de Gapminder sont également disponibles pour les continents. Toutefois, leur classification est différente. Chez OWID, les données sont disponibles pour l'Afrique, l'Amérique du nord, l'Amérique du sud, l'Asie, l'Europe et l'Océanie. Il a d'ailleurs été possible de créer une variable à partir de ces catégories en jumelant les entrées de l'Amérique du nord et de l'Amérique du sud. Cela permet de comparer les données d'OWID avec celles de Gapminder qui a des données disponibles pour seulement quatre régions/continents soit 
+l'Afrique, les Amériques, l'Asie et l'Europe.
+
+### Finalement, trois fichiers de données traitées
+À la suite de ces étapes, le script permet de produire trois nouveaux jeux de données contenant les données de vaccination par pays, par continent et pour le monde pour les années 2020 à 2022. Trois fichiers en format .csv sont disponibles dans le dossier Data/Processed du répertoire du présent projet. Ils représentent les données de vaccination mises en relation avec la population et le P.I.B. et sont divisés selon leur information géographique soit par pays, par continent et finalement pour le monde tel que décrit.
+
+## Quelques tableaux de données et calculs
+
+Mais trève de descriptif! Voici quelques tableaux et calculs pour vous montrer les données.  
+
+Tout d'abord voici les 100 premières entrées du tableaux principal des données de vaccination par pays
+suite à la fusion des divers jeux de données. Pour donner une idée de la magnitude des données, 
+ce tableau a en fait `r nrow(dfVacWorld)` observations. Heureusement, les noms des `r ncol(dfVacWorld)` 
+variables sont assez descriptif pour que l'on puisse s'y retrouver.  
 
 
-### Différents niveaux de titres
+```{r, include=FALSE}
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+paged_table(head(dfVacWorld, n = 100))
+```
 
-Dans vos différents documents, assurez-vous de bien utiliser la notation avec du Markdown et autres. 
+## Cohérence entre les différentes sources
+Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afind e les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
+
+Voici quelques manipulations qui nous permettent de vérifier la concordance entre la variable "total_vaccinations_per_hundred" compilée par OWID et le calcul du même taux en utilisant la variable "total_vaccinations" de OWID avec la variable "Population" par pays de Gapminder
+
+```{r, code_folding = TRUE}
+df100 <- subset(dfVacWorld, select = c(location, Continent7, total_vaccinations, 
+                                      total_vaccinations_per_hundred, Population))
+# Création de la nouvelle variable
+df100 <- df100 %>% 
+  mutate(Verif = total_vaccinations/Population*100)
+
+# arrondir à deux chiffres après la virgule pour comparer avec le même type
+# que les données d'OWID
+df100$Verif <- round(df100$Verif, digits =2)
+
+# Création d'une variable de pourcentage d'erreur à des fins comparatives
+df100 <- df100 %>% 
+  mutate(Pourcentage_erreur = (Verif - total_vaccinations_per_hundred)/total_vaccinations_per_hundred*100)
+
+df100NoNA <- subset(df100, Pourcentage_erreur != "NA")
+df100NoNA <- subset(df100, Pourcentage_erreur != "NaN")
+
+#Moyenne du pourcentage d'erreur pour le total d'observations:
+MoyennePErr <- round(mean(df100NoNA$Pourcentage_erreur), digits=2)
+vraimoyennepourcenterr <- paste0(MoyennePErr, "%")
+
+#Obtenir le nombre d'entrées n'ayant pas le même taux de vaccination par 100 personnes
+df100NoNA <- df100NoNA %>%
+  mutate(vrai_taux = ifelse(total_vaccinations_per_hundred == Verif, "Vrai", "Erroné"))
+
+nvrai <- as.numeric(nrow(df100NoNA[df100NoNA$vrai_taux == "Vrai",]))
+nerrone <- as.numeric(nrow(df100NoNA[df100NoNA$vrai_taux=="Erroné",]))
+
+  
+vrai_taux_tibble <- df100NoNA %>% count(vrai_taux)
+#VPourcentage d'entrées erronées:
+Pourcentage <- round(nerrone/nvrai, digits=4)*100
+
+vraipourcent <- paste0(Pourcentage, "%")
+
+paged_table(vrai_taux_tibble)
+```
+Il y a donc `r nrow(df100NoNA)` observations contenant les valeurs de vaccination et de population ce qui nous permet de calculer différents paramamêtres tel que décrit dans le code disponible ci-haut.  
+
+Il y a `r nvrai` entrée dont le résultat obtenu avec les données de populations de Gapminder concordent avec les données calculées par OWID contre `r nerrone` de résultats erronés. Il s'agit donc de `r vraipourcent` des entrées qui ne concordent pas. Ceci étant dit, la moyenne des pourcentages d'erreur est de `r vraimoyennepourcenterr` pour l'ensemble des données. Il est donc permis d'affirmer que les valeurs sont cohérentes et valides. Elle pourront donc servir à faire certaines analyses statistiques et visualisations afin de dresser un meilleur portrait de la situation vaccinale mondiale.
+
+
 
