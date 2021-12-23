@@ -51,9 +51,10 @@ DataVaccin <- rename(DataVaccin, geo = iso_code)
 # Changer le format pour une date
 DataVaccin$date <- as_date(DataVaccin$date)
 
-#Obtenir les quantités de vaccins par région
+#Obtenir les vaccins par région et enlever les autres niveaux
 RegionVaccin <- subset(DataVaccin, geo=="OWID_AFR" | geo=="OWID_ASI" | geo=="OWID_EUR" | geo=="OWID_NAM" | geo=="OWID_OCE" | geo=="OWID_SAM")
 
+levels(droplevels(RegionVaccin$location))
  
 # Mettre les données mondiales dans un autre objet avant de les enlever
 # Enlever la colonne geo (info. redondante)
@@ -154,18 +155,43 @@ DataVaccination <- DataVaccination %>%
                                     "Americas" = c("North America", "South America")))
 
 # 4 Finir le nettoyage afin de fusionner les df entre-eux
-# Enlever la variable name de DataGapCountriesGDP et de DataGapCountriesPop pour éviter un doublon de variable
+# 4.1 Enlever la variable name de DataGapCountriesGDP et de DataGapCountriesPop pour éviter un doublon de variable
 # les codes iso "geo" seront utilisés pour "merge" les df, car ils sont standardisés
 DataGapCountriesPop <- subset(DataGapCountriesPop, select = -c(2))
 DataGapCountriesGDP <- subset(DataGapCountriesGDP, select = -c(2))
 
-# 5 Fusion Vaccin par pays avec GDP et pop par pays
+# 4.2 Renommer the Americas pour Americas dans les données Gapminder
+DataGapRegionGDP <- DataGapRegionGDP %>% 
+    mutate(name = str_replace_all(name, "The Americas", "Americas"))
+
+DataGapRegionPop <- DataGapRegionPop %>% 
+    mutate(name = str_replace_all(name, "The Americas", "Americas"))
+
+# 4.3 Renommer les variables name des données Gapminder pour Continent et year 
+colnames(DataGapRegionPop)[2] <- "Continent"
+colnames(DataGapRegionGDP)[2] <- "Continent"
+colnames(DataGapRegionPop)[3] <- "year"
+colnames(DataGapRegionGDP)[3] <- "year"
+
+
+colnames(DataGapCountriesPop)[2] <- "year"
+colnames(DataGapCountriesGDP)[2] <- "year"
+
+
+# 5 Fusion des dataframes
+# 5.1 Vaccin par pays avec GDP et pop par pays
 # inclu maintenant les nouvelles variables de continents!
 
-DataVacGDPPopCountry <- DataVaccination
+DataVacGDPPopCountry <- left_join(DataVaccination, DataGapCountriesGDP, 
+                                  by = c("geo", "year"), all.x = TRUE)
+DataVacGDPPopCountry <- left_join(DataVacGDPPopCountry, DataGapCountriesPop,
+                                  by = c("geo", "year"), all.x = TRUE)
 
-
-
+# 5.2 Vaccin par région/continent
+DataVacGDPopRegion <- left_join(RegionVaccin, DataGapRegionGDP,
+                                 by = c("Continent", "year"), all.x = TRUE)
+DataVacGDPPopRegion <- left_join(DataVacGDPPOPRegion, DataGapRegionPop, 
+                                 by = c("Continent", "year"), all.x = TRUE)
 
 
 # Enlever objets inutiles
