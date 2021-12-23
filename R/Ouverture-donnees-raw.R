@@ -177,24 +177,47 @@ colnames(DataGapRegionGDP)[3] <- "year"
 colnames(DataGapCountriesPop)[2] <- "year"
 colnames(DataGapCountriesGDP)[2] <- "year"
 
+colnames(RegionVaccin)[1] <- "Continent"
 
-# 5 Fusion des dataframes
-# 5.1 Vaccin par pays avec GDP et pop par pays
+colnames(DataGapWorldPop)[3] <- "year"
+colnames(DataGapWorldGDP)[3] <- "year"
+
+# 4.4 préparer les données mondiales pour la fusion
+# Retrait des colonnes geo et name, informations redondantes
+DataGapWorldPop <- subset(DataGapWorldPop, select = -c(1,2))
+DataGapWorldGDP <- subset(DataGapWorldGDP, select = -c(1,2))
+
+# 5 Fusion des dataframes pour avoir les documents " data processed" finaux
+# 5.1 Vaccin par pays avec GDP et population par pays
 # inclu maintenant les nouvelles variables de continents!
-
 DataVacGDPPopCountry <- left_join(DataVaccination, DataGapCountriesGDP, 
                                   by = c("geo", "year"), all.x = TRUE)
 DataVacGDPPopCountry <- left_join(DataVacGDPPopCountry, DataGapCountriesPop,
                                   by = c("geo", "year"), all.x = TRUE)
 
-# 5.2 Vaccin par région/continent
-DataVacGDPopRegion <- left_join(RegionVaccin, DataGapRegionGDP,
+# 5.2 Vaccin par région/continent avec GDP et population
+DataVacGDPPopRegion <- left_join(RegionVaccin, DataGapRegionGDP,
                                  by = c("Continent", "year"), all.x = TRUE)
-DataVacGDPPopRegion <- left_join(DataVacGDPPOPRegion, DataGapRegionPop, 
+DataVacGDPPopRegion <- left_join(DataVacGDPPopRegion, DataGapRegionPop, 
                                  by = c("Continent", "year"), all.x = TRUE)
 
+# 5.3 Vaccins informations mondiales avec GDP et population
+DataVacGDPPopWorld <- left_join(WorldVaccin, DataGapWorldPop,
+                         by = "year", all.x = TRUE)
 
-# Enlever objets inutiles
-rm(VacFile, PopFile, GDPFile)
+DataVacGDPPopWorld  <- left_join(DataVacGDPPopWorld , DataGapWorldGDP,
+                         by = "year")
+DataVacGDPPopWorld <- subset(DataVacGDPPopWorld, select = -c(18))
 
-print("Le fichier d'ouverture et manipulation des données a terminé.")
+#6 Transfert des df en .csv et nom de colonnes/variables
+# 6.1 Vaccin par pays avec GDP et population par pays
+write.csv(DataVacGDPPopCountry, "./Data/Processed/VaccinationPopGDP_pays.csv")
+write.csv(DataVacGDPPopRegion, "./Data/Processed/VaccinationPopGDP_continent.csv")
+write.csv(DataVacGDPPopWorld, "./Data/Processed/VaccinationPopGDP_monde.csv")
+
+# Enlever objets qui n'ont pas à être réutilisés
+rm(Continents, DataGapCountriesGDP, DataGapCountriesPop, DataGapRegionGDP, DataGapRegionPop, DataGapWorldGDP,
+   DataGapWorldPop, DataVaccin, DataVaccination, DataVacGDPPopCountry, DataVacGDPPopRegion, DataVacGDPPopWorld,
+   RegionVaccin, WorldVaccin, GDPFile, PopFile, VacFile)
+
+print("Le fichier d'ouverture et manipulation des données a terminé. Mise à jour des données processed effectuée.")
