@@ -58,8 +58,8 @@ RegionVaccin <- subset(DataVaccin, geo=="OWID_AFR" | geo=="OWID_ASI" | geo=="OWI
 # Mettre les données mondiales dans un autre objet avant de les enlever
 # Enlever la colonne geo (info. redondante)
 # location gardée pour le moment au cas où serait utile
-WorldVaccine <- subset(DataVaccin, geo == "OWID_WRL")
-WorldVaccine <- subset(WorldVaccine, select = -c(2))
+WorldVaccin <- subset(DataVaccin, geo == "OWID_WRL")
+WorldVaccin <- subset(WorldVaccin, select = -c(2))
 
 # Utiliser stringr pour sélectionner les codes iso (geo) OWID
 # qui correspondent à des régions, sous-catégories, etc. et les enlever du df principal
@@ -75,7 +75,7 @@ DataVaccin <- DataVaccin %>%
     mutate(year = year(date)) %>% 
     relocate(year, .after = "geo")
 
-WorldVaccine <- WorldVaccine %>% 
+WorldVaccin <- WorldVaccin %>% 
 mutate(year = year(date)) %>% 
     relocate(year, .after = "location")
 
@@ -86,8 +86,8 @@ RegionVaccin <- RegionVaccin %>%
 # 2.2 Gapminder
 # 2.2.1 Données de population
 
-# Les données débutent en 1800 et terminent avec les projections de l'an 2100
-# Enlever les années précédent le début de la vaccination (enlever avant 2020)
+# Les données qui débutent en 1800 et terminent avec les projections de l'an 2100
+# Enlever les années qui précèdent le début de la vaccination (enlever avant 2020)
 DataGapCountriesPop <- subset(DataGapCountriesPop, time >= 2020)
 DataGapRegionPop <- subset(DataGapRegionPop, time >= 2020)
 DataGapWorldPop <- subset(DataGapWorldPop, time >= 2020)
@@ -124,6 +124,7 @@ DataGapCountriesGDP$geo <- str_to_upper(DataGapCountriesGDP$geo)
 colnames(DataGapCountriesGDP)[6] <- "Annual GDP per capita growth"
 
 
+# 3 Ajout de la variable continent
 # Lire le fichier CSV avec les continents/codes ISO
 Continents <- read.csv("./Data/Raw/ContinentsOWID.csv", stringsAsFactors = TRUE)
 
@@ -135,6 +136,39 @@ Continents <- subset(Continents, select = -c(1))
 # Changer le nom de la colonne Code pour qu'elle concorde avec geo
 colnames(Continents)[1] <- "geo"
 
+# Ajout des continents aux données de vaccination par pays
+DataVaccination<- left_join(DataVaccin, Continents, by = "geo", all.x = TRUE)
+
+DataVaccination <- DataVaccination %>% 
+    relocate(Continent, .after = "geo")
+
+# Création d'une nouvelle variable pour les continents
+# Continent7 aura 7 continents tel que décrit par la liste OWID
+# Continent regroupera l'Amérique du Nord et l'Amérique du Sud sous Americas
+DataVaccination <- DataVaccination %>% 
+    mutate(DataVaccination, Continent7 = Continent) %>% 
+    relocate(Continent7, .before = "Continent")
+
+DataVaccination <- DataVaccination %>%
+    mutate(Continent = fct_collapse(Continent,
+                                    "Americas" = c("North America", "South America")))
+
+# 4 Finir le nettoyage afin de fusionner les df entre-eux
+# Enlever la variable name de DataGapCountriesGDP et de DataGapCountriesPop pour éviter un doublon de variable
+# les codes iso "geo" seront utilisés pour "merge" les df, car ils sont standardisés
+DataGapCountriesPop <- subset(DataGapCountriesPop, select = -c(2))
+DataGapCountriesGDP <- subset(DataGapCountriesGDP, select = -c(2))
+
+# 5 Fusion Vaccin par pays avec GDP et pop par pays
+# inclu maintenant les nouvelles variables de continents!
+
+DataVacGDPPopCountry <- DataVaccination
+
+
+
+
 
 # Enlever objets inutiles
 rm(VacFile, PopFile, GDPFile)
+
+print("Le fichier d'ouverture et manipulation des données a terminé.")
