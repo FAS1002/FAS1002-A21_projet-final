@@ -12,8 +12,8 @@ library(lubridate)
 
 # Aller chercher le nom du fichier qui change en fonction de la date
 # Avant de l'ouvrir
-VacFile <- list.files("Data/Raw/", pattern = "Vaccination")
-DataVaccin <- read.csv(paste0("Data/Raw/", VacFile), stringsAsFactors = TRUE)
+VacFile <- list.files("./Data/Raw/", pattern = "Vaccination")
+DataVaccin <- read.csv(paste0("./Data/Raw/", VacFile), stringsAsFactors = TRUE)
 
 
 # 1.2 Gapminder
@@ -21,13 +21,13 @@ DataVaccin <- read.csv(paste0("Data/Raw/", VacFile), stringsAsFactors = TRUE)
 
 # Aller chercher le nom du fichier qui change en fonction de la date
 # Avant de l'ouvrir
-PopFile <- list.files("Data/Raw/", pattern = "GapminderPop")
+PopFile <- list.files("./Data/Raw/", pattern = "GapminderPop")
 
 # Lire les différentes feuilles du fichier excel
 # Attribuer un objet par feuille
-DataGapWorldPop <- read_excel(paste0("Data/Raw/", PopFile), sheet = 2)
-DataGapRegionPop <- read_excel(paste0("Data/Raw/", PopFile), sheet = 3)
-DataGapCountriesPop <- read_excel(paste0("Data/Raw/", PopFile), sheet = 4)
+DataGapWorldPop <- read_excel(paste0("./Data/Raw/", PopFile), sheet = 2)
+DataGapRegionPop <- read_excel(paste0("./Data/Raw/", PopFile), sheet = 3)
+DataGapCountriesPop <- read_excel(paste0("./Data/Raw/", PopFile), sheet = 4)
 
 # 1.2.2 Données de PIB
 
