@@ -35,7 +35,6 @@ source("R/Telechargement.R", local = knitr::knit_global())
 source("R/Ouverture-donnees-raw.R", local = knitr::knit_global())
 ```
 
-
 ```{r}
 #Packages utilisés:
 library(tidyverse)
