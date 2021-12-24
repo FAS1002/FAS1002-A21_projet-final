@@ -1,0 +1,326 @@
+---
+title: "Exploration statistique des données de vaccination"
+description: | 
+  Analyses statistiques et visualisations portant sur les données de vaccination contre la covid-19
+  jumelées aux données de population et du P.I.B. à l'échelle mondiale.
+date: "`r Sys.Date()`"
+# Modifier les détails que vous voulez
+author:
+  - first_name: "Prénom"
+    last_name: "Nom"
+    url: https://github.com/EmmaPep/
+    # les champs d'affiliation sont optionnels, vous pouvez les
+    # comment out en ajoutant un # devant.
+    affiliation: FAS1002
+    affiliation_url: https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/
+    # changer pour votre propre orcid id
+    # https://orcid.org/ pour vous inscrire.
+    # orcid_id: 0000-0000-0000-0000
+# Changer pour votre propre URL si jamais quelqu'un vous cite!
+citation_url: https://emmapep.github.io/FAS1002_projet-final
+# Inclure les références que vous utilisez dans vos rapports
+# dans un fichier biblio.bib. Je conseille Zotero pour construire
+# ce fichier ou d'utiliser le package citr dans RStudio.
+# Installation: devtools::install_github("crsh/citr")
+bibliography: references.bib
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(viridis)
+library(ggridges)
+library(lubridate)
+#Utilisation du csv par pays pour les continent, car plus exhaustif
+# Manque l'Océanie dans les données de Gapminder associées aux continents
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+dfVacRegion <- read.csv("./Data/Processed/VaccinationPopGDP_continent.csv")
+dfVacMonde <- read.csv("./Data/Processed/VaccinationPopGDP_monde.csv")
+```
+
+# Analyse statistique et visualisation portant sur la population et la vaccination
+*Quel est le portrait mondial de la population protégée?*
+
+## Doses de vaccins par continents
+```{r, code_folding=TRUE}
+plot1 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_vaccinations, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations totales",
+       x = "Date",
+       title = "Nombre de vaccins par continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot1
+```
+Le portrait épidémiologique de la prévention de la covid-19 à l'échelle mondial est certe un sujet délicat,
+mais il reste qu'il est très intéressant de par son actualité et par sa portée. Ici, il est possible d'observer
+par continent les quantités de doses administrée depuis la première dose en décembre 2020 jusqu'à aujourd'hui. Il est possible de remarquer que deux continents, l'Afrique et l'Océanie, sont difficilement retraçable sur le graphique dû à leur petit nombre de dose comparés aux autres continent. Il y a bien évidement un effet de population qui varie grandement d'un continent à l'autre, mais il y a ausi des enjeux économiques et sociaux qui influencent ces disparités. Il serait donc intéressant de refaire ce graphique avec une proportion soit la variable de vaccins administrés par 100 habitants.
+
+
+## Vaccins rapportés par 100 habitants
+```{r, code_folding=TRUE}
+plot2 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_vaccinations_per_hundred, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations par 100 habitants",
+       x = "Date",
+       title = "Nombre de vaccins par 100 habitants par continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot2
+```
+Ainsi, une fois les vaccinations rapportées par 100 habitants, nous remarquons que la distribution des trois continents les plus vaccinés (l'Asie, l'Europe et l'Amérique du nord) est changée avec l'Europe qui prend le dessus sur le reste des continents bien que le nombre de personnes vaccinées en Asie par rapport aux autres Continent reste important. Encore une fois il est difficile de distinguer l'Afrique qui se situe en haut en bleu foncé et dont les doses de vaccins données par 100 semblent être moins que dans les autres continents. 
+
+Note: En observant les écarts à intervale constant des lignes blanches dénotant une absence de toutes données pour cette journée, il est aussi possible de voir l'intervale assez régulier de récolte des données par les diférentes instances (gouvernements, OMS, etc.) et colligés par Our World in Data. Ce simple fait est pourtant un bon indicateur d'une surveillance épidémiologique constante et adéquate.
+
+
+
+## Évolution des doses journalières
+Faisons le même exercice avec les doses journalières cette fois
+
+```{r, include=FALSE}
+plot3 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = daily_vaccinations, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations quotidiennes",
+       x = "Date",
+       title = "Nombre de vaccins quotidiens par continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot3
+```
+
+```{r, include=FALSE}
+plot4 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = daily_vaccinations_per_million, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Vaccinations quotidiennes",
+       x = "Date",
+       title = "Nombre de vaccins quotidiens par million selon le continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot4
+```
+Et voilà enfin une visualisation qui permet de bien voir la situation en Afrique et en Océanie. En rapportant le nombre de doses quotidienne de vaccins par million d'habitants, nous pouvons observer l'évolution de la distribution des doses qui a connu son appogée au cours de l'été 2021. Avec le temps, il sera possible de voir si la tendance à la baisse se maintient ou si l'arrivée des doses supplémentaires (boosters) influencera la distribution.
+
+
+```{r, include=FALSE}
+plot5 <- ggplot(data = dfVacWorld,
+                aes(x = as.Date(date), y = total_boosters_per_hundred, fill = Continent7))+
+  geom_col()+
+  scale_fill_viridis_d(option = "C")+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Boosters par 100 d'habitants",
+       x = "Date",
+       title = "Nombre de boosters administrés selon le continent",
+       subtitle = "de la première dose à aujourd'hui",
+       fill = "Continents")
+
+plot5
+```
+
+En gardant la même échelle de date malgré l'autorisation données pour l'utilisation de "boosters" à l'été 2021,
+il est possible de voir pourquoi le graphique des doses quotidiennes administrées toute catégorie continue à être bien rempli à la fin de l'année 2021 malgré une légère baisse, l'arrivée des troisièmes doses joue sur la distribution en faveur notamment de l'Europe qui a de loin la plus grade proportion de troisième dose depuis l'automne 2021. 
+
+
+## Analyses statistiques des dernières données obtenues
+```{r, include=FALSE}
+lastdate <- dfVacWorld %>% 
+  summarise(latest = format(max(as.Date(date)))) %>% 
+  ungroup()
+
+latestdate <- max(as.Date(dfVacWorld$date))
+latestdate1 <- max(as.Date(dfVacWorld$date))-1
+latestdate2 <- max(as.Date(dfVacWorld$date))-2
+latestdate3 <- max(as.Date(dfVacWorld$date))-3
+latestdate4 <- max(as.Date(dfVacWorld$date))-4
+latestdate5 <- max(as.Date(dfVacWorld$date))-5
+latestdate6 <- max(as.Date(dfVacWorld$date))-6
+
+
+dfLatest <- subset(dfVacWorld, date == latestdate)
+
+dfLatestWeek <- subset(dfVacWorld, date == latestdate | date == latestdate1 | date == latestdate2 | date == latestdate3 | date == latestdate4 | date == latestdate5 | date == latestdate6 )
+
+dfCan <- subset(dfVacWorld, location == "Canada")
+dfCanWeek <- subset(dfCan, date == latestdate | date == latestdate1 | date == latestdate2 | date == latestdate3 | date == latestdate4 | date == latestdate5 | date == latestdate6 )
+
+# Moyenne mondiale des vaccinations totales quotidiennes de la dernière semaine
+DailyMeanWorld <- mean(as.numeric(dfLatest$daily_people_vaccinated), na.rm = TRUE)
+DailyMeanWorldWeek <- mean(as.numeric(dfLatestWeek$daily_people_vaccinated), na.rm = TRUE)
+
+DailyMeanCan <- mean(as.numeric(dfCan$daily_people_vaccinated), na.rm = TRUE)
+DailyMeanCanWeek <- mean(as.numeric(dfCanWeek$daily_people_vaccinated), na.rm = TRUE)
+
+LatestCanada <- subset(dfCan, date == latestdate)
+DailyCan <- (as.numeric(LatestCanada$daily_people_vaccinated))
+
+# Différence entre la moyenne de vaccinations au Canada et dans le monde
+DiffWorldCan <- DailyMeanWorld - DailyMeanCan
+DiffWorldCanWeek <- DailyMeanWorldWeek - DailyMeanCanWeek
+
+# Quantité mondiale totale de vaccins pour la dernière journée reçue
+LatestDayDataMonde <- subset(dfVacMonde, date == latestdate)
+VaccinTotMondeDaily <- (as.numeric(LatestDayDataMonde$daily_people_vaccinated))
+
+PourcentCanWorld <- DailyCan/VaccinTotMondeDaily*100
+
+PourcentCanWorldPaste <- paste(PourcentCanWorld, "%")
+```
+
+Quelques statistiques permettent de mettre en lumière la situation de la campagne vaccinale au Canada à comparer au monde. Dans la dernière semaine, il y a eu en moyenne `r DailyMeanCanWeek` doses de vaccin données au Canada à comparer à `r DailyMeanWorldWeek` dans le monde. Il y a donc une différence de `r DiffWorldCanWeek` doses. Au cours de la pandémie, la moyenne des vaccins par jour est plutôt de `r DailyMeanCan` au Canada et `r DailyMeanWorld` pour une différence de `r DiffWorldCan`. En date de la dernière journée dont les données ont été partagées, le Canada avait vacciné `r DailyCan` personnes en une seule journée. Ce chiffre représente `r PourcentCanWorldPaste` de la totalité mondiale des gens vaccinés en cette même journée, total qui se situe à `r VaccinTotMondeDaily`.
+
+
+## Statistiques sur les vaccins vs le revenu par habitant
+Avec les données que nous avons rassemblées, il est également possible de comparer les pays en fonction de certains paramètres économiques. Regardons ici s'il y a une concordance entre un le revenu par habitant et le nombre de doses de vaccins selon la population. Regardons les dernières informations reçues pour les 10 pays ayant le plus haut revenu par habitant vs les 10 pays ayant les plus bas revenus par habitants. Encore une fois, procédons à l'étude de la moyenne et ajoutons cette fois les maximums et minimums de chaque catégories.
+
+```{r}
+dfHighest10 <- dfLatest[with(dfLatest, order(-Income.per.person)),]
+dfHighest10 <- dfHighest10[1:10,]
+
+dfLowest10 <- dfLatest[with(dfLatest, order(Income.per.person)),]
+dfLowest10 <- dfLowest10[1:10,]
+
+MeanHighest10 <- mean(as.numeric(dfHighest10$Income.per.person), na.rm = TRUE)
+MaxValueHighest10 <- max(as.numeric(dfHighest10$Income.per.person))
+MinValueHighest10 <- min(as.numeric(dfHighest10$Income.per.person))
+
+MeanLowest10 <- mean(as.numeric(dfLowest10$Income.per.person), na.rm = TRUE)
+MaxValueLowest10 <- max(as.numeric(dfLowest10$Income.per.person))
+MinValueLowest10 <- min(as.numeric(dfLowest10$Income.per.person))
+
+MeanHighest10Vac <- mean(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred), na.rm = TRUE)
+MaxValueHighest10Vac <- max(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred))
+MinValueHighest10Vac <- min(as.numeric(dfHighest10$people_fully_vaccinated_per_hundred))
+
+MeanLowest10Vac <- mean(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred), na.rm = TRUE)
+MaxValueLowest10Vac <- max(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred))
+MinValueLowest10Vac <- min(as.numeric(dfLowest10$people_fully_vaccinated_per_hundred))
+
+PourcentagediffLowHigh <- MeanLowest10Vac/MeanHighest10Vac*100
+
+
+```
+
+Après quelques calculs il est possible d'observer que la moyenne de gens adéquatement vacciné des 10 pays ayant le moins haut taux de revenu par habitant est de `r MeanLowest10Vac` ce qui est équivalent à `r PourcentagediffLowHigh%` à comparer à la moyenne de `r MeanHighest10Vac` des 10 pays ayant le plus haut taux de revenu par habitant. Il y a donc une différence marquée entre le taux de revenu par habitant et les vaccins administrés. Évidement, plusieurs facteurs entre en ligne de compte, mais cela signifie qu'il est possible de se demander comment appuyer les nations moins nanties de façon adéquate afin de faire une prévention épidémiologique adéquate dans cette situation hors du commun qui touche le monde entier.   
+
+```{r, include=FALSE}
+plot6 <- ggplot(data = dfLowest10,
+                aes(x = Income.per.person, y = people_fully_vaccinated_per_hundred))+
+  geom_line()+
+  geom_smooth()+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Revenu par habitant",
+       x = "Nombre de personnes vaccinées",
+       title = "Nombre de personnes vaccinées selon le revenu",
+       subtitle = "chez les 10 pays ayant les revenus les plus faibles")
+
+plot6
+```
+
+```{r}
+plot7 <- ggplot(data = dfHighest10,
+                aes(x = Income.per.person, y = people_fully_vaccinated_per_hundred))+
+  geom_line()+
+  geom_smooth()+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(legend.title = element_text(family = "Arial",face = "bold"))+
+  theme(legend.box.background = element_rect(size=0.3))+
+  theme(legend.position = c(.05, .95),
+        legend.justification = c("left", "top"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Revenu par habitant",
+       x = "Nombre de personnes vaccinées",
+       title = "Nombre de personnes vaccinées selon le revenu",
+       subtitle = "chez les 10 pays ayant les revenus les plus élevés")
+
+plot7
+```
+Terminons avec deux simples visualisations qui mettent en contexte les tendances observées du côté des 10 pays aux extrèmes du revenu pas habitant. Contrairement à ce que l'on pourrait penser, les pays ayant les revenus les plus élévés n'ont pas nécessairement les plus haut taux de vaccinations chez les pays les plus riches alors que la tendance inverse peut être observée chez les pays ayant un revenu par habitant moins élevé.
+
+
+Ainsi les données récoltées permettent de faire un survol de la situation vaccinale mondiale tout en confirmant la validité de la surveillance épidémiologique et statistique en temps de pandémie.
+
+Les graphiques ont été fait avec le @wickham_ggplot2_2016
