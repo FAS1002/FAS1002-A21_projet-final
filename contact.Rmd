@@ -6,21 +6,11 @@ description: |
 toc: false
 ---
 
-
 ## Courte biographie
 
 Ce rapport a été préparé par Emmanuelle Pépin en tant qu'étudiante du [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) à la session d'automne 2021.
 
-Emmanuelle est assistante de recherche co-investigatrice à l'unité de recherche clinique en hématologie, oncologie et immunologie du centre de recherche du CHU Sainte-Justine à Montréal sous la direction de M. Arnaud Bonnefoy, PhD en plus de travailler au départment de médecine de laboratoire du CHUSJ. Elle consacre son temps à l'étude épidémiologique et biochimique des microangiopathies thrombotiques. Le cours FAS1002 est toutefois sa première aventure du côté de la programmation. Néophyte absolue à ce niveau il y a quelques semaines, elle a pu produire des projets en R depuis, dont celui-ci. Une telle tâche n'est pas toujours évidente, mais l'aventure est toujours enrichissante!
-
-
-
-
-
-
-<aside>
-![](static/images/FAS1002.png){width=80%}
-</aside>
+Emmanuelle est assistante de recherche co-investigatrice à l'unité de recherche clinique en hématologie, oncologie et immunologie du centre de recherche du CHU Sainte-Justine à Montréal sous la direction de M. Arnaud Bonnefoy, PhD en plus de travailler au départment de médecine de laboratoire du CHUSJ. Elle consacre son temps à l'étude épidémiologique et biochimique des microangiopathies thrombotiques. Le cours FAS1002 est toutefois sa première aventure du côté de la programmation. Néophyte absolue à ce niveau il y a quelques semaines, elle a pu produire des projets en R depuis, dont celui-ci. Une telle tâche n'est pas toujours évidente, mais l'aventure est toujours fort enrichissante!
 
 
 ## Contact
