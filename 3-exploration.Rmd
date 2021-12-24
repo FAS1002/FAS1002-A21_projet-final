@@ -1,7 +1,7 @@
 ---
-title: "Exploration statistique et Visualisation"
+title: "Exploration statistique des données de vaccination"
 description: | 
-  Analyses statistiques et visualisations portant sur les données de vaccination contre la covid-19
+  Analyses statistiques descriptives portant sur les données de vaccination contre la covid-19
   jumelées aux données de population et du P.I.B. à l'échelle mondiale.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
@@ -32,20 +32,207 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r, include=FALSE}
 library(tidyverse)
-library(viridis)
-library(ggridges)
 library(lubridate)
 #Utilisation du csv par pays pour les continent, car plus exhaustif
 # Manque l'Océanie dans les données de Gapminder associées aux continents
-dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+dfVacPays <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
 dfVacRegion <- read.csv("./Data/Processed/VaccinationPopGDP_continent.csv")
 dfVacMonde <- read.csv("./Data/Processed/VaccinationPopGDP_monde.csv")
 ```
 
+
+# Exploration des données
+## Tableaux de statistiques descriptives
+
+L'exploration de jeux de données complexes comme ceux que nous utilisons dans ce travail est beaucoup plus efficace lorsque présenté en tableau. Voici le code et les résultats obtenus afin que vous puissiez suivre les démarches.
+
+### Portrait mondial des doses
+Voici un tableau montrant le portrait mondial des vaccins administrés depuis le début de la pandémie en date de la dernière date disponible sur l'extraction d'OWID.
+Vaccins:
+```{r}
+# Dernières observations mondiale
+dfMondeDernier <- dfVacMonde %>% 
+  filter(row_number(desc(date)) == 1)
+
+dateMondeDernier <- (dfMondeDernier$date)
+
+# Ne garder que les variables d'intérêt
+dfMondeDoses <- dfMondeDernier %>% 
+  select(total_vaccinations, total_vaccinations_per_hundred, total_boosters, 
+          total_boosters_per_hundred, daily_vaccinations_per_million)
+
+# Renommer les variables
+dfMondeDoses <- dfMondeDoses %>% 
+  rename(Total = total_vaccinations, Par_100_habitants = total_vaccinations_per_hundred, Boosters = total_boosters, Boosters_par_100_habitants = total_boosters_per_hundred, Par_jour_par_million = daily_vaccinations_per_million)
+
+MondeDosesTibble <- as_tibble(dfMondeDoses)
+
+MondeDosesTibble
+
+```
+Ces données datent du `r dateMondeDernier`
+
+
+### Portrait mondial de la population ayant reçue un vaccin
+Personnes vaccinées:
+```{r}
+# Ajout d'une valeur de pourcentage mondial de gens vacciné
+dfMondePersonnes <- dfMondeDernier %>% 
+  mutate(Pourcentage_adéquatement_vacciné = (people_fully_vaccinated/Population)*100)
+
+#Ne garder que les variables d'intérêt
+dfMondePersonnes <- dfMondePersonnes %>% 
+  select(people_vaccinated, people_vaccinated_per_hundred, people_fully_vaccinated, people_fully_vaccinated_per_hundred, daily_people_vaccinated, daily_people_vaccinated_per_hundred, Pourcentage_adéquatement_vacciné)
+
+#Renommer les variables
+dfMondePersonnes <- dfMondePersonnes %>% 
+  rename(Total = people_vaccinated, par100_habitants = people_vaccinated_per_hundred, Adéquatement = people_fully_vaccinated, adéquatement_par100_habitants = people_fully_vaccinated_per_hundred, Par_jour = daily_people_vaccinated, Par_jour_par_100habitants = daily_people_vaccinated_per_hundred)
+
+MondePersonnesTibbles <- as_tibble(dfMondePersonnes)
+
+MondePersonnesTibbles
+```
+c'est données datent du `r dateMondeDernier`
+
+### Évolution du pourcentage de personnes adéquatement vaccinées dans le monde:
+```{r}
+# Ajout d'une valeur de pourcentage mondial de gens vacciné
+dfMondeAdequat <- dfVacMonde %>% 
+  mutate(Pourcentage = (people_fully_vaccinated/Population)*100)
+
+# Visualisation simple
+PlotMondeVac <- ggplot(data = dfMondeAdequat,
+                aes(x = as.Date(date), y = Pourcentage))+
+  geom_line(color = "pink", size = 1.5)+
+  theme_classic()+
+  theme(axis.title.x = element_text(family = "Arial"))+
+  theme(title = element_text(family = "Arial", face = "bold"))+
+  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
+  theme(axis.title.y = element_text(family = "Arial",size = 12))+
+  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
+  theme(axis.text.y = element_text(family = "Arial",size = 12))+
+  labs(y = "Pourcentage",
+       title = "Évolution de la couverture vaccinale adéquate mondiale",
+       subtitle = "de la première dose à aujourd'hui")
+
+PlotMondeVac
+```
+
+
+### Portrait des doses de vaccins par pays
+
+```{r}
+# Temps écoulé entre les observations et le rapport
+dfPays <- dfVacPays %>% 
+  mutate(Temps = (Sys.Date() - as.Date(date)))
+
+# Ne garder que les variables d'intérêt
+dfPaysDoses <- dfPays %>% 
+  select(location, Continent7, total_vaccinations, total_vaccinations_per_hundred, total_boosters, total_boosters_per_hundred, daily_vaccinations, daily_vaccinations_per_million, Temps)
+
+dfPaysDoses <- dfPaysDoses %>% 
+  rename(Pays = location, Continent = Continent7, Total = total_vaccinations, Total_par_100 = total_vaccinations_per_hundred, Boosters = total_boosters, Boosters_par_100 = total_boosters_per_hundred, Par_jour = daily_vaccinations, Par_jour_par_million = daily_vaccinations_per_million, Temps_écoulé = Temps)
+
+PaysDailyDoses <- dfPays %>% 
+  group_by(location) %>% 
+  summarise(Nombre_observations = n(),
+            Moyenne_doses_par_jour = mean(daily_vaccinations, na.rm = TRUE),
+            Médiane_doses_par_jour = median(daily_vaccinations, na.rm = TRUE),
+            Min_doses_par_jour = min(daily_vaccinations, na.rm = TRUE),
+            Max_doses_par_jour = max(daily_vaccinations, na.rm = TRUE),
+            Ecart_interquartile = IQR(daily_vaccinations, na.rm = TRUE),
+            Déviation = sd(daily_vaccinations, na.rm = TRUE),
+            Variance = var(daily_vaccinations, na.rm = TRUE),
+            Somme_données_manquantes = sum(is.na(dfPays$daily_vaccinations)))
+
+PaysDailyDoses
+
+```
+
+### Portrait des doses de vaccins par continent
+```{r}
+ContinentDailyDoses <- dfPays %>% 
+  group_by(Continent7) %>% 
+  summarise(Nombre_observations = n(),
+            Moyenne_doses_par_jour = mean(daily_vaccinations, na.rm = TRUE),
+            Médiane_doses_par_jour = median(daily_vaccinations, na.rm = TRUE),
+            Min_doses_par_jour = min(daily_vaccinations, na.rm = TRUE),
+            Max_doses_par_jour = max(daily_vaccinations, na.rm = TRUE),
+            Ecart_interquartile = IQR(daily_vaccinations, na.rm = TRUE),
+            Déviation = sd(daily_vaccinations, na.rm = TRUE),
+            Variance = var(daily_vaccinations, na.rm = TRUE),
+            Somme_données_manquantes = sum(is.na(dfPays$daily_vaccinations)))
+
+ContinentDailyDoses
+```
+
+### Portrait du nombre de personnes vaccinées quotidiennement par pays
+```{r}
+PaysGensJour <- dfPays %>% 
+  group_by(location) %>% 
+  summarise(Nombre_observations = n(),
+            Moyenne_gens_par_jour = mean(daily_people_vaccinated, na.rm = TRUE),
+            Médiane_gens_par_jour = median(daily_people_vaccinated, na.rm = TRUE),
+            Min_gens_par_jour = min(daily_people_vaccinated, na.rm = TRUE),
+            Max_gens_par_jour = max(daily_people_vaccinated, na.rm = TRUE),
+            Ecart_interquartile = IQR(daily_people_vaccinated, na.rm = TRUE),
+            Déviation = sd(daily_people_vaccinated, na.rm = TRUE),
+            Variance = var(daily_people_vaccinated, na.rm = TRUE),
+            Données_manquantes = sum(is.na(dfPays$daily_people_vaccinated)))
+
+PaysGensJour
+```
+### Portrait du nombre de personnes vaccinées quotidiennement par continent
+```{r}
+PaysGensJour <- dfPays %>% 
+  group_by(Continent7) %>% 
+  summarise(Nombre_observations = n(),
+            Moyenne_gens_par_jour = mean(daily_people_vaccinated, na.rm = TRUE),
+            Médiane_gens_par_jour = median(daily_people_vaccinated, na.rm = TRUE),
+            Min_gens_par_jour = min(daily_people_vaccinated, na.rm = TRUE),
+            Max_gens_par_jour = max(daily_people_vaccinated, na.rm = TRUE),
+            Ecart_interquartile = IQR(daily_people_vaccinated, na.rm = TRUE),
+            Déviation = sd(daily_people_vaccinated, na.rm = TRUE),
+            Variance = var(daily_people_vaccinated, na.rm = TRUE),
+            Données_manquantes = sum(is.na(dfPays$daily_people_vaccinated)))
+
+PaysGensJour
+```
+
+### Portrait actuel de la couverture vaccinale par pays
+Étude des dernières données
+```{r}
+# Garder que la dernière observation pour chaque pays
+dfPaysDosesDernier <- dfPays %>% 
+  group_by(location) %>% 
+  slice(which.max(as.Date(date)))
+
+PaysDosesDernierTibble <- as_tibble(dfPaysDosesDernier)
+PaysDosesDernierTibble 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Analyse statistique et visualisation portant sur la population et la vaccination
 *Quel est le portrait mondial de la population protégée?*
 
-## Doses de vaccins par continents
+### Doses de vaccins par continents
 ```{r, code_folding=TRUE}
 plot1 <- ggplot(data = dfVacWorld,
                 aes(x = as.Date(date), y = total_vaccinations, fill = Continent7))+
