@@ -1,7 +1,7 @@
 ---
-title: "Portrait de la vaccination contre la covid-19 dans le monde"
+title: "Données de la vaccination contre la covid-19: profil d'une situation particulière"
 description: |
-  Site concernant l'exploration de données de la vaccination contre la covid-19 fais dans le cadre du cours FAS1002
+  Bienvenue sur ce site d'exploration des données de vaccination contre la covid-19.
   
 site: distill::distill_website
 toc: false
@@ -11,7 +11,28 @@ toc: false
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-  Bienvenue sur ce site portant sur l'exploration des données mondiales de la vaccination contre la covid-19. Cette situation qui évolue à vitesse grand v est une source infinie de données. Les prochaines pages permettrons de débuter à examiner la situation actuelle. Évidemment, la magnitude de la pandémie de SRAS-CoV-2 est grande. Il s'agit donc ici d'une occasion de sonder les données afin d'approfondir notre compréhension de celles-ci. ^[Limite de cet exercice: il est important de noter que le but de cette présentation est d'explorer les données et non d'émettre quelconques recommendations ou d'en sortir des conclusions hautement scientifiques.]
+## Projet final
+
+Produit dans le cadre du cours [FAS1002-Initiation à la programmation](https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/) donné à [l'Université de Montréal](https://www.umontreal.ca/) à la session d'automne 2021, ce site est utilisé comme rapport final d'étude des données mondiales de vaccination contre la covid-19 afin de dresser un portrait de cette situation qui est en constante évolution. Cet exercice donne l'occasion de sonder les données afin d'approfondir notre compréhension de celles-ci. ^[À noter: le présent rapport se veut être une opportunité d'exploration de ces données et ne remplace en aucun cas les analyses et conseils des diverses autorités en la matière.]   
+
+## Méthodologie
+Sommaire du processus effectué afin de produire le présent rapport.   
+
+### Programmation
+Le projet a principalement été réalisé avec le langage de programmation R via l'environnement de développement intégré RStudio utilisé conjointement avec une synchronisation sur GitHub. Toutes les démarches statistiques ont été programmées en R et le rapport, extrait sous forme de site internet par la suite, a été programmé en markdown et en utilisant le package Distill pour l'exportation en format web. 
+
+### Données
+Les données brutes utilisées sont téléchargées de deux organismes importants en ce qui à trait à la vulgarisation des données concernant divers enjeux sociaux. Les données de vaccination proviennent d'[Our World in Data](https://ourworldindata.org/) tandis que les données de population et de paramètres économiques tel le produit intérieur brute proviennent de [Gapminder](https://www.gapminder.org/). Les algorithmes de téléchargement programmés ont été pensés en fonction de la fréquence de mise à jour des données par ces organismes. Les banques de données brutes obtenues ont été nettoyées afin de pouvoir les jumeler adéquatement entre elles et ainsi ajouter les informations de population et de paramètres économiques aux données de vaccination. Par la suite, les données traitées ont été divisées afin de produire divers jeux de données et ce dans le but d'effectuer des analyses statistiques et des visualisations. Diverses fonction de base de R et du package tidyverse ont été utilisées afin de traiter ces données. La démarche complète des manipulations est expliquée à la [page d'importation des données](2-import.html).    
+
+### Analyses statistiques
+Une série d'analyses statistiques descriptives ont été effectuées afin de dresser le portrait mondial de la situation épidémiologique préventive associée à la vaccination contre la covid-19. L'utilisation de tableaux pouvant être mis à jour automatiquement avec le code permet de donner certains résultats de données qui sont constamment mise à jour au lieu d'utiliser un format statique. Le package KableExtra a été utilisé à ces fins d'autant plus qu'il facilite l'inclusion de tableaux en format html. Toutes les analyses ont été effectuées en R et la description de la démarche peut être trouvée dans la [page d'exploration des données](3-exploration.html).  
+
+### Visualisation des données
+Les données traitées ont par la suite servie à produire des visualisations permettant de reconnaître les tendances de la vaccination contre le SARS-CoV-2. Les graphiques ont été réalisés avec le package ggplot2 et les thèmes de couleurs proviennent du package viridis. Ce package a été choisi pour établir les échelles de couleur, car il a été programmé afin de produire des visualisations accessibles pour les personnes ayant divers troubles de la vision dont le daltonisme. Le package ggplot2 a été privilégié à comparer aux graphiques de base de R dû à sa grande diversité de paramètres pouvant être ajusté en fonction des besoins analytiques et visuels. Les visualisations et leur interprétations sont disponibles dans la [page de visualisation des données](4-visualisation.html)
+
+### Rapport final
+Bien que ce site au complet fasse office de rapport final, une page 
+
 
 
   
