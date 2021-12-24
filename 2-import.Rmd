@@ -47,7 +47,7 @@ Les données utilisées dans le présent travail proviennent de deux sources dif
 Our World in Data et Gapminder. Ces organisations ont comme mission d'utiliser les données 
 afin d'illustrer de façon compréhensible et excitante les problèmes et enjeux du monde actuel
 tout en appliquant des principes de données ouvertes. Bien qu'elles aient chacunes leur propre méthodologie,
-ces organisations récoltent des données de diverses sources afin de dresser le portrait le plus représetatif possible de plusieurs enjeux et sujets.   
+ces organisations récoltent des données de diverses sources afin de dresser le portrait le plus représentatif possible de plusieurs enjeux et sujets.   
 
 Vu la quantité infinie d'information disponible, il est toutefois important de bien cerner
 les données à utiliser. La présente section décrit les jeux de données retenus
@@ -59,11 +59,10 @@ La banque de données principale de cette étude provient de l'organisme [Our Wo
 
 **La banque de données de vaccination en quelques points**  
 - Disponible en format .csv sur GitHub  
-- Elle contient 16 variables  
 - Des observations y sont ajoutées quotidiennement par OWID  
 - Les observations sont classées selon le pays ou une région définie par OWID  
-  - Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3  
-  - Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
+  * Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3  
+  * Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
     Ce code servira d'ailleurs à fusionner les différentes banques de données.
 
 ## Gapminder  
@@ -74,8 +73,8 @@ L'organisme [Gapminder](https://www.gapminder.org/) rend disponible plusieurs je
 - Disponibles en format .xlsx sur Google Doc  
 - Les fichiers Excel contiennent différentes pages (monde, par pays, par continent, per capita, etc. qui peuvent être traitées séparément  
 - Les mise-à-jour ne sont pas constantes, mais la date de la dernière mise-à-jour est toujours disponible sur la première page nommée "About" du fichier Excel.  
-  - Population, dernière mise à jour  disponible en date du 22 décembre 2021 : 10 décembre 2019  
-  - GDP, dernière mise à jour disponible en date du 22 décembre 2021 : 30 avril 2021  
+  * Population, dernière mise à jour  disponible en date du 22 décembre 2021 : 10 décembre 2019  
+  * GDP, dernière mise à jour disponible en date du 22 décembre 2021 : 30 avril 2021  
 - Particularité de Gapminder: leurs banques de données contiennent les prévisions pour les années à venir d'où l'importance de la date de mise-à-jour. Ainsi, les informations de population de 2020 et 2021, par exemple, devraient changer lorsque l'information sera disponible. Cette particularité est à garder en tête lorsque nous regarderons les résultats de certaines analyses.  
 
 # Traitement des données
@@ -83,7 +82,7 @@ L'organisme [Gapminder](https://www.gapminder.org/) rend disponible plusieurs je
 Toutes les données utilisées dans le présent rapport sont disponibles dans le [répertoire GitHub associé à ce projet](https://github.com/EmmaPep/FAS1002_projet-final). Les données brutes ont été déposées dans le dossier Raw situé à l'intérieur du dossier Data. Il s'agit des données provenant directement de OWID et Gapminder et qui n'ont pas encore été traitées. Un script a été réalisé afin de permettre la mise-à-jour des fichiers. Ainsi, les données provenant de OWID sont téléchargées quotidiennement alors que celles de Gapminder sont téléchargées dans le répertoire à tous les mois lorsque le script est utilisé pour générer le site web actuel. Le tout est possible dû au fait que la sauvegarde des fichiers a été codée en incluant la date dans le titre. Il est alors possible d'extraire la date et de la comparée à la date d'aujourd'hui. Se faisant, il a été possible de coder une règle de téléchargement conditionnel par rapport à la date en utilisant une expression particulière permettant de sélectionner la date de sauvegarde du fichier se trouvant dans le titre. Une fois la nouvelle banque de données téléchargée, le script efface également la version désuette.  
 
 ##Préparation des données: des données brutes aux données traitées
-Les trois jeux de données brutes se situant dans le dossier Data/Raw sont utilisées dans un second script permettant de nettoyer et rassembler différents tableaux de données. 
+Les trois jeux de données brutes se situant dans le dossier Data/Raw sont utilisées dans un second script permettant de nettoyer et rassembler différents jeux de données. 
 
 ### Données sur la vaccination (covid-19)
 Le nettoyage effectué sur les données provenant d'Our World in Data consistait surtout à uniformiser les divers appelations de régions afin de pouvoir rattacher ces données à celles de Gapminder. Heureusement, les deux organismes utilisent les notations ISO-3166 alpha-3 ce qui permet, après une harmonisation des noms de variables de bien identifier les régions et associer les données adéquatement. 
