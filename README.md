@@ -21,6 +21,7 @@ ISDS](https://github.com/osumontreal/template_r).
 ├── 1-intro.Rmd
 ├── 2-import.Rmd
 ├── 3-exploration.Rmd
+├── 4-visualisation.Rmd
 ├── contact.Rmd
 ├── docs
 ├── FAS1002_projet-final.Rproj
@@ -39,6 +40,11 @@ ISDS](https://github.com/osumontreal/template_r).
 │   │   └── GapminderGDP[date].xlsx
 │   │   └── GapminderPop[date].xlsx
 │   │   └── Vaccination[date].csv
+├── docs
+├── R
+│   └── Notes-et-scripts-autres.R
+│   └── Ouverture-donnes-raw.R
+│   └── Telechargement.R
 ├── references.bib
 ├── _site.yml
 └── static
@@ -49,36 +55,45 @@ ISDS](https://github.com/osumontreal/template_r).
 ## Documents et dossiers dans le répertoire
 Plusieurs documents et dossiers constituent se répertoire, les plus importants sont décrits ici:  
 
-**R**
+**R**  
 Dossier contenant les scripts utilisés dans les documents Rmarkdown
 
-**Data**
+**Data**  
 Dossier comprenant les données brutes (sous-dossier "Raw") et les données traitées (sous-dossier "Processed")
 
-**index.Rmd**
+**static**  
+Dossier avec des images en format png
+
+**Docs**
+Dossier contenant les fichiers du site web
+
+**index.Rmd**  
 Document Rmarkdown contenant la description sommaire du projet
 
-**1-intro.Rmd**
+**1-intro.Rmd**  
 Document Rmarkdown comprenant l'introduction et la description du projet
 
-**2-import.Rmd**
+**2-import.Rmd**  
 Document Rmarkdown comprenant les explications des jeux de données utilisés, 
 leur provenance, leur téléchargement, leur traitement et une exploration sommaire.
 
-**3-exploration.Rmd**
+**3-exploration.Rmd**  
 Document Rmarkdown comprenant les explorations statistiques et les visualisations
 attachées au projet. 
 
-**contact.Rmd**
+**4-visualisation.Rmd**  
+Document Rmarkdown comprenant des visualisations. 
+
+**contact.Rmd**  
 Document Rmarkdown comprenant les informations de la personne ayant effectué le rapport. 
 
-**references.bib**
+**references.bib**  
 Les références utilisées dans ce travail.
 
-**FAS1002_projet-final.Rproj**
+**FAS1002_projet-final.Rproj**  
 Session de travail du projet dans RStudio
 
-**Autres documents**
+**Autres documents**  
 Les autres documents se trouvant dans ce répertoire proviennent des différents scripts et Rmarkdowns. 
 Ils sont notamment présents pour générer le site web associé à ce répertoire.
 
