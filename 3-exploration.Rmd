@@ -47,7 +47,7 @@ dfVacMonde <- read.csv("./Data/Processed/VaccinationPopGDP_monde.csv")
 L'exploration de jeux de données complexes comme ceux que nous utilisons dans ce travail est beaucoup plus efficace lorsque présenté en tableau. Voici le code et les résultats obtenus afin que vous puissiez suivre les démarches.
 
 ### Portrait mondial des doses
-Voici un tableau montrant le portrait mondial des vaccins administrés depuis le début de la pandémie en date de la dernière date disponible sur l'extraction d'OWID.
+Voici un tableau montrant le portrait mondial des vaccins administrés depuis le début de la pandémie en date de la dernière date disponible sur l'extraction d'*OWID*.
 Vaccins:
 ```{r}
 # Dernières observations mondiale
@@ -104,6 +104,7 @@ dfMondeAdequat <- dfVacMonde %>%
 PlotMondeVac <- ggplot(data = dfMondeAdequat,
                 aes(x = as.Date(date), y = Pourcentage))+
   geom_line(color = "pink", size = 1.5)+
+  expand_limits(y = 100)+
   theme_classic()+
   theme(axis.title.x = element_text(family = "Arial"))+
   theme(title = element_text(family = "Arial", face = "bold"))+
@@ -200,15 +201,35 @@ PaysGensJour
 ```
 
 ### Portrait actuel de la couverture vaccinale par pays
-Étude des dernières données
+Survol des dernières données
+Ce tableau inclu toutes les observations telles que données par *OWID* et *Gapminder* et contient une variable indiquant le temps écoulé entre la dernière observations compilée par *OWID* et la date où le rapport a été généré.
 ```{r}
 # Garder que la dernière observation pour chaque pays
 dfPaysDosesDernier <- dfPays %>% 
   group_by(location) %>% 
   slice(which.max(as.Date(date)))
 
+# Renommer la valeur de temps
+dfPaysDosesDernier <- dfPaysDosesDernier %>% 
+  rename(Temps_écoulé = Temps)
+
 PaysDosesDernierTibble <- as_tibble(dfPaysDosesDernier)
 PaysDosesDernierTibble 
+```
+
+### Tableau comparatif des doses de vaccins par pays selon les dernières observations obtenues
+```{r}
+SommairePaysDernier <- dfPaysDosesDernier %>% 
+  summarise(Moyenne_vaccins = mean(total_vaccinations, na.rm = TRUE),
+            Médiane_vaccins = median(total_vaccinations, na.rm = TRUE),
+            Min_vaccins = min(total_vaccinations, na.rm = TRUE),
+            Max_vaccins = max(total_vaccinations, na.rm = TRUE),
+            Ecart_interquartile = IQR(total_vaccinations, na.rm = TRUE),
+            Déviation = sd(total_vaccinations, na.rm = TRUE),
+            Variance = var(total_vaccinations, na.rm = TRUE),
+            Données_manquantes = sum(is.na(dfPaysDosesDernier$total_vaccinations)))
+
+
 ```
 
 
@@ -220,6 +241,12 @@ PaysDosesDernierTibble
 
 
 
+
+
+
+
+## Téléchargement des données traitées {.appendix}
+Les données traitées sont disponibles pour téléchargement dans le dossier Data/Processed du [répertoire GitHUb du présent projet](https://github.com/EmmaPep/FAS1002_projet-final/tree/main/Data/Processed).
 
 
 
