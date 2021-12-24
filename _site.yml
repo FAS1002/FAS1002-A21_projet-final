@@ -4,7 +4,7 @@ favicon: static/images/FAS1002.png
 # N'oubliez pas d'activer votre site web dans vos params sur GH.
 repository_url: https://github.com/EmmaPep/FAS1002_projet-final
 description: |
-  Projet final pour le cours FAS1002!
+  Projet final pour le cours FAS1002 de l'automne 2021 donné à l'Université de Montréal.
 output_dir: "docs"
 theme: static/theme.css
 navbar:
@@ -28,7 +28,7 @@ navbar:
 
   right:
   # L'ordre et les noms == arbitraires, usez de créativité.
-    - text: "Introduction"
+    - text: "Projet"
       href: 1-intro.html
     - text: "Importation"
       href: 2-import.html
