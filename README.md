@@ -29,6 +29,16 @@ ISDS](https://github.com/osumontreal/template_r).
 ├── README.md
 ├── R
 ├── Data
+│   ├── Processed
+│   │   └── VaccinationPopGDP_continent.csv
+│   │   └── VaccinationPopGDP_monde.csv
+│   │   └── VaccinationPopGDP_pays.csv
+│   │   └── VaccinationPopGDP_pays.csv
+│   ├── Raw
+│   │   └── ContinentsOWID.csv
+│   │   └── GapminderGDP[date].xlsx
+│   │   └── GapminderPop[date].xlsx
+│   │   └── Vaccination[date].csv
 ├── references.bib
 ├── _site.yml
 └── static
@@ -36,8 +46,6 @@ ISDS](https://github.com/osumontreal/template_r).
     │   └── FAS1002.png
     └── theme.css
 ```
-
-
 ## Documents et dossiers dans le répertoire
 Plusieurs documents et dossiers constituent se répertoire, les plus importants sont décrits ici:  
 
