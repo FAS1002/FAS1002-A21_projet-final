@@ -47,7 +47,7 @@ Les données utilisées dans le présent travail proviennent de deux sources dif
 Our World in Data et Gapminder. Ces organisations ont comme mission d'utiliser les données 
 afin d'illustrer de façon compréhensible et excitante les problèmes et enjeux du monde actuel
 tout en appliquant des principes de données ouvertes. Bien qu'elles aient chacunes leur propre méthodologie,
-ces organisations récoltent des données de diverses sources afin de dresser le portrait le plus représetatif possible de plusieurs enjeux et sujets.   
+ces organisations récoltent des données de diverses sources afin de dresser le portrait le plus représentatif possible de plusieurs enjeux et sujets.   
 
 Vu la quantité infinie d'information disponible, il est toutefois important de bien cerner
 les données à utiliser. La présente section décrit les jeux de données retenus
@@ -59,11 +59,10 @@ La banque de données principale de cette étude provient de l'organisme [Our Wo
 
 **La banque de données de vaccination en quelques points**  
 - Disponible en format .csv sur GitHub  
-- Elle contient 16 variables  
 - Des observations y sont ajoutées quotidiennement par OWID  
 - Les observations sont classées selon le pays ou une région définie par OWID  
-  - Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3  
-  - Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
+  * Les pays sont classés en utilisant la classification ISO 3166-1 alpha-3  
+  * Les régions ont un code début par *OWID-* pour les distinguer des codes standardisés des pays
     Ce code servira d'ailleurs à fusionner les différentes banques de données.
 
 ## Gapminder  
@@ -74,8 +73,8 @@ L'organisme [Gapminder](https://www.gapminder.org/) rend disponible plusieurs je
 - Disponibles en format .xlsx sur Google Doc  
 - Les fichiers Excel contiennent différentes pages (monde, par pays, par continent, per capita, etc. qui peuvent être traitées séparément  
 - Les mise-à-jour ne sont pas constantes, mais la date de la dernière mise-à-jour est toujours disponible sur la première page nommée "About" du fichier Excel.  
-  - Population, dernière mise à jour  disponible en date du 22 décembre 2021 : 10 décembre 2019  
-  - GDP, dernière mise à jour disponible en date du 22 décembre 2021 : 30 avril 2021  
+  * Population, dernière mise à jour  disponible en date du 22 décembre 2021 : 10 décembre 2019  
+  * GDP, dernière mise à jour disponible en date du 22 décembre 2021 : 30 avril 2021  
 - Particularité de Gapminder: leurs banques de données contiennent les prévisions pour les années à venir d'où l'importance de la date de mise-à-jour. Ainsi, les informations de population de 2020 et 2021, par exemple, devraient changer lorsque l'information sera disponible. Cette particularité est à garder en tête lorsque nous regarderons les résultats de certaines analyses.  
 
 # Traitement des données
@@ -83,7 +82,7 @@ L'organisme [Gapminder](https://www.gapminder.org/) rend disponible plusieurs je
 Toutes les données utilisées dans le présent rapport sont disponibles dans le [répertoire GitHub associé à ce projet](https://github.com/EmmaPep/FAS1002_projet-final). Les données brutes ont été déposées dans le dossier Raw situé à l'intérieur du dossier Data. Il s'agit des données provenant directement de OWID et Gapminder et qui n'ont pas encore été traitées. Un script a été réalisé afin de permettre la mise-à-jour des fichiers. Ainsi, les données provenant de OWID sont téléchargées quotidiennement alors que celles de Gapminder sont téléchargées dans le répertoire à tous les mois lorsque le script est utilisé pour générer le site web actuel. Le tout est possible dû au fait que la sauvegarde des fichiers a été codée en incluant la date dans le titre. Il est alors possible d'extraire la date et de la comparée à la date d'aujourd'hui. Se faisant, il a été possible de coder une règle de téléchargement conditionnel par rapport à la date en utilisant une expression particulière permettant de sélectionner la date de sauvegarde du fichier se trouvant dans le titre. Une fois la nouvelle banque de données téléchargée, le script efface également la version désuette.  
 
 ##Préparation des données: des données brutes aux données traitées
-Les trois jeux de données brutes se situant dans le dossier Data/Raw sont utilisées dans un second script permettant de nettoyer et rassembler différents tableaux de données. 
+Les trois jeux de données brutes se situant dans le dossier Data/Raw sont utilisées dans un second script permettant de nettoyer et rassembler différents jeux de données. 
 
 ### Données sur la vaccination (covid-19)
 Le nettoyage effectué sur les données provenant d'Our World in Data consistait surtout à uniformiser les divers appelations de régions afin de pouvoir rattacher ces données à celles de Gapminder. Heureusement, les deux organismes utilisent les notations ISO-3166 alpha-3 ce qui permet, après une harmonisation des noms de variables de bien identifier les régions et associer les données adéquatement. 
@@ -102,6 +101,13 @@ l'Afrique, les Amériques, l'Asie et l'Europe.
 
 ## Quelques tableaux de données et calculs
 
+```{r, include=FALSE}
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+Table100 <- paged_table(head(dfVacWorld, n = 100))
+
+Table100
+```
+
 Mais trève de descriptif! Voici quelques tableaux et calculs pour vous montrer les données.  
 
 Tout d'abord voici les 100 premières entrées du tableaux principal des données de vaccination par pays
@@ -109,14 +115,8 @@ suite à la fusion des divers jeux de données. Pour donner une idée de la magn
 ce tableau a en fait `r nrow(dfVacWorld)` observations. Heureusement, les noms des `r ncol(dfVacWorld)` 
 variables sont assez descriptif pour que l'on puisse s'y retrouver.  
 
-
-```{r, include=FALSE}
-dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
-paged_table(head(dfVacWorld, n = 100))
-```
-
 ## Cohérence entre les différentes sources
-Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afind e les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
+Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afin de les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
 
 Voici quelques manipulations qui nous permettent de vérifier la concordance entre la variable "total_vaccinations_per_hundred" compilée par OWID et le calcul du même taux en utilisant la variable "total_vaccinations" de OWID avec la variable "Population" par pays de Gapminder
 
@@ -139,7 +139,7 @@ df100NoNA <- subset(df100, Pourcentage_erreur != "NA")
 df100NoNA <- subset(df100, Pourcentage_erreur != "NaN")
 
 #Moyenne du pourcentage d'erreur pour le total d'observations:
-MoyennePErr <- round(mean(df100NoNA$Pourcentage_erreur), digits=2)
+MoyennePErr <- round(mean(as.numeric(df100NoNA$Pourcentage_erreur)), digits=2)
 vraimoyennepourcenterr <- paste0(MoyennePErr, "%")
 
 #Obtenir le nombre d'entrées n'ayant pas le même taux de vaccination par 100 personnes
@@ -152,11 +152,13 @@ nerrone <- as.numeric(nrow(df100NoNA[df100NoNA$vrai_taux=="Erroné",]))
   
 vrai_taux_tibble <- df100NoNA %>% count(vrai_taux)
 #VPourcentage d'entrées erronées:
-Pourcentage <- round(nerrone/nvrai, digits=4)*100
+Pourcentage <- round(nerrone/(nerrone+nvrai), digits=4)*100
 
 vraipourcent <- paste0(Pourcentage, "%")
 
-paged_table(vrai_taux_tibble)
+VraiTauxTibble <- paged_table(vrai_taux_tibble)
+
+VraiTauxTibble
 ```
 Il y a donc `r nrow(df100NoNA)` observations contenant les valeurs de vaccination et de population ce qui nous permet de calculer différents paramamêtres tel que décrit dans le code disponible ci-haut.  
 
@@ -164,3 +166,6 @@ Il y a `r nvrai` entrée dont le résultat obtenu avec les données de populatio
 
 
 
+
+## Téléchargement des données traitées {.appendix}
+Les données traitées sont disponibles pour téléchargement dans le dossier Data/Processed du [répertoire GitHUb du présent projet](https://github.com/EmmaPep/FAS1002_projet-final/tree/main/Data/Processed).

@@ -2,28 +2,25 @@
 # Vous pouvez vous servir de cette page pour parler de vous.
 title: "À propos"
 description: |
-    Lisez ci-dessous pour en apprendre plus sur Emmanuelle, la personne derrière ce rapport.
+    Quelques détails sur Emmanuelle, la personne derrière ce rapport.
 toc: false
 ---
 
+## Courte biographie
 
-## Bio 
+Ce rapport a été préparé par Emmanuelle Pépin en tant qu'étudiante du [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) à la session d'automne 2021.
 
-Ce rapport a été préparé par Emmanuelle Pépin en tant qu'étudiante du [cours FAS1002](https://admission.umontreal.ca/cours-et-horaires/cours/fas-1002/) 
-
-Bien qu'Emmanuelle sois assistante de recherche en centre hospitalier, le cours FAS1002 est sa première aventure du côté de la programmation. Néophyte absolue à ce niveau il y a quelques semaines, elle a pu essayer de produire des projets en R depuis, dont celui-ci! La tâche n'est pas toujours évidente, mais l'aventure est toujours enrichissante.
-
-
-<aside>
-![](static/images/FAS1002.png){width=80%}
-</aside>
+Emmanuelle est assistante de recherche co-investigatrice à l'unité de recherche clinique en hématologie, oncologie et immunologie du centre de recherche du CHU Sainte-Justine à Montréal sous la direction de M. Arnaud Bonnefoy, PhD en plus de travailler au départment de médecine de laboratoire du CHUSJ. Elle consacre son temps à l'étude épidémiologique et biochimique des microangiopathies thrombotiques. Le cours FAS1002 est toutefois sa première aventure du côté de la programmation. Néophyte absolue à ce niveau il y a quelques semaines, elle a pu produire des projets en R depuis, dont celui-ci. Une telle tâche n'est pas toujours évidente, mais l'aventure est toujours fort enrichissante!
 
 
 ## Contact
-
+Pour toutes questions sur le programme d'étude, n'hésitez pas à communiquer avec les ressources suivantes:
 **Programme** | [Microprogramme en analyse des mégadonnées en sciences humaines et sociales](https://admission.umontreal.ca/programmes/microprogramme-de-1er-cycle-en-analyse-des-megadonnees-en-sciences-humaines-et-sociales/structure-du-programme/)
 
 **Université** | [Université de Montréal](https://umontreal.ca)
 
+Pour toutes questions sur le présent travail:
+**Profil sur GitHub**  | [Emmanuelle Pépin](https://github.com/EmmaPep)
 
-
+## Remerciements {.appendix}
+J'aimerais remercier les autres étudiants du cours FAS1002 pour les discussions et leurs présentations qui furent fort instructives ainsi que Samuel Guay pour sa patience et pour m'avoir enseigné à programmer, chose que je n'aurais jamais pensé être capable de faire. Un remerciement particulier également à mes collègues qui m'ont encouragés et soutenus tout au long de cette aventure en plus de me permettre d'apprendre à leur côté à chaque jour. Merci!
