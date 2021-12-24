@@ -4,6 +4,7 @@
 
 # Utilisation de readxl
 library(tidyverse)
+library(readxl)
 library(lubridate)
 
 # 1 OUVERTURE DES DONNÉES
@@ -14,10 +15,6 @@ library(lubridate)
 # Avant de l'ouvrir
 VacFile <- list.files("./Data/Raw/", pattern = "Vaccination")
 DataVaccin <- read.csv(paste0("./Data/Raw/", VacFile), stringsAsFactors = TRUE)
-
-#Au départ, il n'y avait pas de colonne avec une valeur X, cela semble jouer 
-# avec mon code qui était fonctionnel il y a 2 heures... Ainsi
-DataVaccin <- subset(DataVaccin, select = -(X))
 
 # 1.2 Gapminder
 # 1.2.1 Données de population
@@ -54,9 +51,11 @@ DataVaccin <- rename(DataVaccin, geo = iso_code)
 # Changer le format pour une date
 DataVaccin$date <- as_date(DataVaccin$date)
 
-#Obtenir les vaccins par région et enlever les autres niveaux
+# Obtenir les vaccins par région et enlever les autres niveaux
 RegionVaccin <- subset(DataVaccin, geo=="OWID_AFR" | geo=="OWID_ASI" | geo=="OWID_EUR" | geo=="OWID_NAM" | geo=="OWID_OCE" | geo=="OWID_SAM")
 
+# Obtenir les vaccins par statut économique
+EconoVaccin <- subset(DataVaccin, geo=="OWID_HIC" | geo=="OWID_LIC"| geo=="OWID_LMC"| geo=="OWID_UMC")
  
 # Mettre les données mondiales dans un autre objet avant de les enlever
 # Enlever la colonne geo (info. redondante)
@@ -83,6 +82,10 @@ mutate(year = year(date)) %>%
     relocate(year, .after = "location")
 
 RegionVaccin <- RegionVaccin %>% 
+    mutate(year = year(date)) %>%  
+    relocate(year, .after = "geo")
+
+EconoVaccin <- EconoVaccin %>% 
     mutate(year = year(date)) %>%  
     relocate(year, .after = "geo")
 
@@ -128,10 +131,10 @@ colnames(DataGapCountriesGDP)[6] <- "Annual GDP per capita growth"
 
 
 # 3 Ajout de la variable continent
-# Lire le fichier CSV avec les continents/codes ISO
+# 3.1 Lire le fichier CSV avec les continents/codes ISO
 Continents <- read.csv("./Data/Raw/ContinentsOWID.csv", stringsAsFactors = TRUE)
 
-# Nettoyage pour n'avoir que les codes et continents
+# 3.2 Nettoyage pour n'avoir que les codes et continents
 #Enlever la date de la dernière mise-à-jour (colomne 3) qui est inutile ici.
 Continents <- subset(Continents, select = -c(3))
 # Enlever entity pour éviter d'ajouter une autre colonne avec les noms de pays/entités
@@ -139,13 +142,13 @@ Continents <- subset(Continents, select = -c(1))
 # Changer le nom de la colonne Code pour qu'elle concorde avec geo
 colnames(Continents)[1] <- "geo"
 
-# Ajout des continents aux données de vaccination par pays
+# 3.3 Ajout des continents aux données de vaccination par pays
 DataVaccination<- left_join(DataVaccin, Continents, by = "geo", all.x = TRUE)
 
 DataVaccination <- DataVaccination %>% 
     relocate(Continent, .after = "geo")
 
-# Création d'une nouvelle variable pour les continents
+# 3.4 Création d'une nouvelle variable pour les continents
 # Continent7 aura 7 continents tel que décrit par la liste OWID
 # Continent regroupera l'Amérique du Nord et l'Amérique du Sud sous Americas
 DataVaccination <- DataVaccination %>% 
@@ -216,6 +219,7 @@ DataVacGDPPopWorld <- subset(DataVacGDPPopWorld, select = -c(18))
 write.csv(DataVacGDPPopCountry, "./Data/Processed/VaccinationPopGDP_pays.csv")
 write.csv(DataVacGDPPopRegion, "./Data/Processed/VaccinationPopGDP_continent.csv")
 write.csv(DataVacGDPPopWorld, "./Data/Processed/VaccinationPopGDP_monde.csv")
+write.csv(EconoVaccin, "./Data/Processed/VaccinationEconomique.csv")
 
 # Enlever objets qui n'ont pas à être réutilisés
 rm(Continents, DataGapCountriesGDP, DataGapCountriesPop, DataGapRegionGDP, DataGapRegionPop, DataGapWorldGDP,

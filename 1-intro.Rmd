@@ -30,31 +30,13 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Introduction
-La situation actuelle sans précédent nous force à essayer de comprendre l'incompréhensible. Heureusement, la science des données nous permet de traiter une grande quantité de données de façon rigoureuse et éclairée afin de dresser un portrait le moins biaisé possible de la pandémie. Dans le présent projet, le focus sera sur l'état de la vaccination contre la covid-19. 
+La situation actuelle sans précédent nous force à essayer de comprendre l'incompréhensible. Heureusement, la science des données nous permet de traiter une grande quantité de données de façon rigoureuse et éclairée afin de dresser un portrait le moins biaisé possible de la pandémie. Dans le présent projet, le focus sera sur l'état de la vaccination contre la covid-19.
 
 # Données
 ## Validité des jeux de données
-En jumelant des données de deux sources différentes, il devient impératif d'essayer de valider la concordances entre celles-ci. La banque de données provenant de Our World in Data sur l'état mondial de la vaccination contre la covid-19 contient une variable de vaccinations totales par 100 habitants. Il est donc possible de vérifier la concordance entre cette banque de données et celle contenant les informations de population obtenue sur le site de Gapminder. Ainsi, en prenant le nombre total de vaccinations et en le divisant avec la population mondiale, il est possible de rapporter ce chiffre sur 100 afin d'en comparer la validité. En date du 23 décembre 2021, il y avait 2147 valeurs qui ne concordaient pas avec la valeur de OWID alors que 28774 observations concordaient. Cea signifie que 6,94% des entrées diffèrent de la valeur d'OWID. Toutefois, l'écart moyen de la différence entre la valeur d'OWID et celle calculée pour ce projet est infime. Comme le pourcentage d'entrées erronées sur les entrées totales est relativement faible et que la variance est basse de toute façon, cela prouve la validité du jeu de données. Ces données peuvent donc être explorer. Plus de détails sur les calculs et les conclusions se trouvent à la [page d'importation des données](2-import.html).   
+En jumelant des données de deux sources différentes, il devient impératif d'essayer de valider la concordances entre celles-ci. La banque de données provenant de Our World in Data sur l'état mondial de la vaccination contre la covid-19 contient une variable de vaccinations totales par 100 habitants. Il est donc possible de vérifier la concordance entre cette banque de données et celle contenant les informations de population obtenue sur le site de Gapminder. Ainsi, en prenant le nombre total de vaccinations et en le divisant avec la population mondiale, il est possible de rapporter ce chiffre sur 100 afin d'en comparer la validité. En date du 23 décembre 2021, il y avait 2147 valeurs qui ne concordaient pas avec la valeur de OWID alors que 28774 observations concordaient. Cea signifie que 6,94% des entrées diffèrent de la valeur d'OWID. Toutefois, l'écart moyen de la différence entre la valeur d'OWID et celle calculée pour ce projet est infime. Comme le pourcentage d'entrées erronées sur les entrées totales est relativement faible et que la variance est basse de toute façon, cela prouve la validité du jeu de données. Ces données peuvent maintenant être explorées sans soucis. Plus de détails sur les calculs et les conclusions se trouvent à la [page d'importation des données](2-import.html).   
 
-
-
-
-
-## Remerciements {.appendix}
-
-
-Il est maintenant le temps de décrire votre projet avant de passer au document suivant, soit l'importation et la manipulation des données. 
-
-Il s'agit d'un fichier R Markdown traditionnel, évidemment. Je vous conseille d'écrire cette partie en dernier, une fois que vous aurez déjà vos résultats et figures afin d'éviter de réécrire cette page plusieurs fois.
-
-## Inclure des graphiques ou des images pour présenter les ensembles de données.
-
-Comme la Figure \@ref(fig:diam) par exemple:
-
-```{r diam, layout="l-body-outset", fig.width=6, fig.height=1.5, fig.cap="Beaucoup de diamants"}
-library(ggplot2)
-ggplot(diamonds, aes(carat, price)) + geom_smooth() +
-  facet_grid(~ cut)
-```
+## Exploration et visualisation
+Une exploration des données a été faite à partir des données récoltées. Plusieurs tableaux récapitulatifs et graphiques se trouvent d'ailleurs à les sections suivantes. Au fil d'analyses statistiques descriptives, il est possible de voir l'étendue actuelle de la couverture vaccinale mondiale. Au moment de la rédaction de ce rapport, par moins de 8 852 627 295 de doses avaient été administrée autour du globe. Il s'agit de 4383 doses par jour par million d'habitants. Ceci étant dit les analyses permettent de voir que moins de 50% de la population mondiale est adéquatement protégée.
 
 

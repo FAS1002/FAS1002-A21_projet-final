@@ -1,8 +1,7 @@
 ---
 title: "Exploration statistique des données de vaccination"
 description: | 
-  Analyses statistiques et visualisations portant sur les données de vaccination contre la covid-19
-  jumelées aux données de population et du P.I.B. à l'échelle mondiale.
+  Visualisation portant sur les données de vaccination contre la covid-19 ainsi qu'un survol du rapport entre les vaccins administrés et le revenu par habitant.
 date: "`r Sys.Date()`"
 # Modifier les détails que vous voulez
 author:
@@ -133,7 +132,7 @@ plot3 <- ggplot(data = dfVacWorld,
 
 plot3
 ```
-
+## Évolution des doses journalières par million
 ```{r, include=FALSE}
 plot4 <- ggplot(data = dfVacWorld,
                 aes(x = as.Date(date), y = daily_vaccinations_per_million, fill = Continent7))+
@@ -241,7 +240,11 @@ Quelques statistiques permettent de mettre en lumière la situation de la campag
 ## Statistiques sur les vaccins vs le revenu par habitant
 Avec les données que nous avons rassemblées, il est également possible de comparer les pays en fonction de certains paramètres économiques. Regardons ici s'il y a une concordance entre un le revenu par habitant et le nombre de doses de vaccins selon la population. Regardons les dernières informations reçues pour les 10 pays ayant le plus haut revenu par habitant vs les 10 pays ayant les plus bas revenus par habitants. Encore une fois, procédons à l'étude de la moyenne et ajoutons cette fois les maximums et minimums de chaque catégories.
 
-```{r}
+
+
+```{r include=FALSE}
+# Plusieurs manipulation, visualisation effectuée n'était pas concluante
+# Laissée comme trace.
 dfHighest10 <- dfLatest[with(dfLatest, order(-Income.per.person)),]
 dfHighest10 <- dfHighest10[1:10,]
 
@@ -271,56 +274,10 @@ PourcentagediffLowHigh <- MeanLowest10Vac/MeanHighest10Vac*100
 
 Après quelques calculs il est possible d'observer que la moyenne de gens adéquatement vacciné des 10 pays ayant le moins haut taux de revenu par habitant est de `r MeanLowest10Vac` ce qui est équivalent à `r PourcentagediffLowHigh%` à comparer à la moyenne de `r MeanHighest10Vac` des 10 pays ayant le plus haut taux de revenu par habitant. Il y a donc une différence marquée entre le taux de revenu par habitant et les vaccins administrés. Évidement, plusieurs facteurs entre en ligne de compte, mais cela signifie qu'il est possible de se demander comment appuyer les nations moins nanties de façon adéquate afin de faire une prévention épidémiologique adéquate dans cette situation hors du commun qui touche le monde entier.   
 
-```{r, include=FALSE}
-plot6 <- ggplot(data = dfLowest10,
-                aes(x = Income.per.person, y = people_fully_vaccinated_per_hundred))+
-  geom_line()+
-  geom_smooth()+
-  theme_classic()+
-  theme(axis.title.x = element_text(family = "Arial"))+
-  theme(title = element_text(family = "Arial", face = "bold"))+
-  theme(legend.title = element_text(family = "Arial",face = "bold"))+
-  theme(legend.box.background = element_rect(size=0.3))+
-  theme(legend.position = c(.05, .95),
-        legend.justification = c("left", "top"))+
-  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
-  theme(axis.title.y = element_text(family = "Arial",size = 12))+
-  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
-  theme(axis.text.y = element_text(family = "Arial",size = 12))+
-  labs(y = "Revenu par habitant",
-       x = "Nombre de personnes vaccinées",
-       title = "Nombre de personnes vaccinées selon le revenu",
-       subtitle = "chez les 10 pays ayant les revenus les plus faibles")
 
-plot6
-```
 
-```{r}
-plot7 <- ggplot(data = dfHighest10,
-                aes(x = Income.per.person, y = people_fully_vaccinated_per_hundred))+
-  geom_line()+
-  geom_smooth()+
-  theme_classic()+
-  theme(axis.title.x = element_text(family = "Arial"))+
-  theme(title = element_text(family = "Arial", face = "bold"))+
-  theme(legend.title = element_text(family = "Arial",face = "bold"))+
-  theme(legend.box.background = element_rect(size=0.3))+
-  theme(legend.position = c(.05, .95),
-        legend.justification = c("left", "top"))+
-  theme(axis.title.x = element_text(family = "Arial",face = "bold", size = 12))+
-  theme(axis.title.y = element_text(family = "Arial",size = 12))+
-  theme(axis.text.x = element_text(family = "Arial",size = 12, angle = 30, hjust = 1))+
-  theme(axis.text.y = element_text(family = "Arial",size = 12))+
-  labs(y = "Revenu par habitant",
-       x = "Nombre de personnes vaccinées",
-       title = "Nombre de personnes vaccinées selon le revenu",
-       subtitle = "chez les 10 pays ayant les revenus les plus élevés")
 
-plot7
-```
-Terminons avec deux simples visualisations qui mettent en contexte les tendances observées du côté des 10 pays aux extrèmes du revenu pas habitant. Contrairement à ce que l'on pourrait penser, les pays ayant les revenus les plus élévés n'ont pas nécessairement les plus haut taux de vaccinations chez les pays les plus riches alors que la tendance inverse peut être observée chez les pays ayant un revenu par habitant moins élevé.
 
 
 Ainsi les données récoltées permettent de faire un survol de la situation vaccinale mondiale tout en confirmant la validité de la surveillance épidémiologique et statistique en temps de pandémie.
 
-Les graphiques ont été fait avec le @wickham_ggplot2_2016

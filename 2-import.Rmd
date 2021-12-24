@@ -101,6 +101,13 @@ l'Afrique, les Amériques, l'Asie et l'Europe.
 
 ## Quelques tableaux de données et calculs
 
+```{r, include=FALSE}
+dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
+Table100 <- paged_table(head(dfVacWorld, n = 100))
+
+Table100
+```
+
 Mais trève de descriptif! Voici quelques tableaux et calculs pour vous montrer les données.  
 
 Tout d'abord voici les 100 premières entrées du tableaux principal des données de vaccination par pays
@@ -108,14 +115,8 @@ suite à la fusion des divers jeux de données. Pour donner une idée de la magn
 ce tableau a en fait `r nrow(dfVacWorld)` observations. Heureusement, les noms des `r ncol(dfVacWorld)` 
 variables sont assez descriptif pour que l'on puisse s'y retrouver.  
 
-
-```{r, include=FALSE}
-dfVacWorld <- read.csv("./Data/Processed/VaccinationPopGDP_pays.csv")
-paged_table(head(dfVacWorld, n = 100))
-```
-
 ## Cohérence entre les différentes sources
-Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afind e les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
+Comme nous avons jumelés des données de sources différentes, il serait intéressant de les comparer afin de les valider. Heureusement, il est possible de prendre la variable de total de vaccinations par 100 habitants d'OWID afin de la comparer aux données de population de Gapminder.
 
 Voici quelques manipulations qui nous permettent de vérifier la concordance entre la variable "total_vaccinations_per_hundred" compilée par OWID et le calcul du même taux en utilisant la variable "total_vaccinations" de OWID avec la variable "Population" par pays de Gapminder
 
@@ -138,7 +139,7 @@ df100NoNA <- subset(df100, Pourcentage_erreur != "NA")
 df100NoNA <- subset(df100, Pourcentage_erreur != "NaN")
 
 #Moyenne du pourcentage d'erreur pour le total d'observations:
-MoyennePErr <- round(mean(df100NoNA$Pourcentage_erreur), digits=2)
+MoyennePErr <- round(mean(as.numeric(df100NoNA$Pourcentage_erreur)), digits=2)
 vraimoyennepourcenterr <- paste0(MoyennePErr, "%")
 
 #Obtenir le nombre d'entrées n'ayant pas le même taux de vaccination par 100 personnes
@@ -151,11 +152,13 @@ nerrone <- as.numeric(nrow(df100NoNA[df100NoNA$vrai_taux=="Erroné",]))
   
 vrai_taux_tibble <- df100NoNA %>% count(vrai_taux)
 #VPourcentage d'entrées erronées:
-Pourcentage <- round(nerrone/nvrai, digits=4)*100
+Pourcentage <- round(nerrone/(nerrone+nvrai), digits=4)*100
 
 vraipourcent <- paste0(Pourcentage, "%")
 
-paged_table(vrai_taux_tibble)
+VraiTauxTibble <- paged_table(vrai_taux_tibble)
+
+VraiTauxTibble
 ```
 Il y a donc `r nrow(df100NoNA)` observations contenant les valeurs de vaccination et de population ce qui nous permet de calculer différents paramamêtres tel que décrit dans le code disponible ci-haut.  
 
@@ -163,3 +166,6 @@ Il y a `r nvrai` entrée dont le résultat obtenu avec les données de populatio
 
 
 
+
+## Téléchargement des données traitées {.appendix}
+Les données traitées sont disponibles pour téléchargement dans le dossier Data/Processed du [répertoire GitHUb du présent projet](https://github.com/EmmaPep/FAS1002_projet-final/tree/main/Data/Processed).
