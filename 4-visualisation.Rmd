@@ -272,7 +272,7 @@ PourcentagediffLowHigh <- MeanLowest10Vac/MeanHighest10Vac*100
 
 ```
 
-Après quelques calculs il est possible d'observer que la moyenne de gens adéquatement vacciné des 10 pays ayant le moins haut taux de revenu par habitant est de `r MeanLowest10Vac` ce qui est équivalent à `r PourcentagediffLowHigh%` à comparer à la moyenne de `r MeanHighest10Vac` des 10 pays ayant le plus haut taux de revenu par habitant. Il y a donc une différence marquée entre le taux de revenu par habitant et les vaccins administrés. Évidement, plusieurs facteurs entre en ligne de compte, mais cela signifie qu'il est possible de se demander comment appuyer les nations moins nanties de façon adéquate afin de faire une prévention épidémiologique adéquate dans cette situation hors du commun qui touche le monde entier.   
+Après quelques calculs il est possible d'observer que la moyenne de gens adéquatement vacciné des 10 pays ayant le moins haut taux de revenu par habitant est de `r MeanLowest10Vac` ce qui est équivalent à `r PourcentagediffLowHigh` à comparer à la moyenne de `r MeanHighest10Vac` des 10 pays ayant le plus haut taux de revenu par habitant. Il y a donc une différence marquée entre le taux de revenu par habitant et les vaccins administrés. Évidement, plusieurs facteurs entre en ligne de compte, mais cela signifie qu'il est possible de se demander comment appuyer les nations moins nanties de façon adéquate afin de faire une prévention épidémiologique adéquate dans cette situation hors du commun qui touche le monde entier.   
 
 
 
