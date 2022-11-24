@@ -1,4 +1,4 @@
-# FAS1002_projet-final
+# FAS1002-A21_projet-final
 
 Ce répertoire se veut exemple typique d'un rapport fonctionnel à remettre pour
 le projet final du cours [FAS1002 - Initiation à la programmation en sciences
@@ -17,7 +17,7 @@ certains dossiers cruciaux, mais ils n'y sont pas à des fins éducatives!
 
 2.  Ensuite, vous devez activer *GitHub Pages* et choisir la branche `main` et
     la source `/docs`. La première version que vous verrez sera la version
-    originale trouvable au <https://fas1002.github.io/FAS1002_projet-final/>.
+    originale trouvable au <https://fas1002.github.io/FAS1002-A22_projet-final/>.
 
 3.  N'oubliez pas de modifier votre section `About` en haut à droite de votre
     répertoire pour faciliter la visite de votre site web.
@@ -49,7 +49,7 @@ certains dossiers cruciaux, mais ils n'y sont pas à des fins éducatives!
 ├── 3-exploration.Rmd
 ├── contact.Rmd
 ├── docs
-├── FAS1002_projet-final.Rproj
+├── FAS1002-A22_projet-final.Rproj
 ├── _footer.html
 ├── index.Rmd
 ├── README.md
